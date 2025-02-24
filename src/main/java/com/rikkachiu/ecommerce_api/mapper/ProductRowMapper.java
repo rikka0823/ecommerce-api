@@ -1,5 +1,6 @@
 package com.rikkachiu.ecommerce_api.mapper;
 
+import com.rikkachiu.ecommerce_api.constant.ProductCategory;
 import com.rikkachiu.ecommerce_api.model.dto.ProductDTO;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -15,7 +16,7 @@ public class ProductRowMapper implements RowMapper<ProductDTO> {
         ProductDTO productDTO = ProductDTO.builder()
                 .productId(rs.getInt("product_id"))
                 .productName(rs.getString("product_name"))
-                .category(rs.getString("category"))
+                .category(ProductCategory.valueOf(rs.getString("category")))
                 .imageUrl(rs.getString("image_url"))
                 .price(rs.getInt("price"))
                 .stock(rs.getInt("stock"))

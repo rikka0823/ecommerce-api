@@ -20,14 +20,16 @@ public class ProductDaoImpl implements ProductDao {
     public ProductDTO getProductById(Integer productId) {
 
         // sql 語法與欄位映射
-        String sql = "SELECT product_id, product_name, category, image_url, price, stock, description, created_date, last_modified_date " +
+        String sql = "SELECT product_id, product_name, category, image_url, " +
+                "price, stock, description, created_date, last_modified_date " +
                 "FROM product " +
                 "WHERE product_id = :productId";
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("productId", productId);
 
         // 取得映射物件 list，並檢查是否為空
-        List<ProductDTO> productDTOList = namedParameterJdbcTemplate.query(sql, params, new ProductRowMapper());
+        List<ProductDTO> productDTOList = namedParameterJdbcTemplate
+                .query(sql, params, new ProductRowMapper());
         if (productDTOList.isEmpty()) {
             return null;
         }
