@@ -1,5 +1,6 @@
 package com.rikkachiu.ecommerce_api.dao.product;
 
+import com.rikkachiu.ecommerce_api.constant.ProductCategory;
 import com.rikkachiu.ecommerce_api.mapper.ProductRowMapper;
 import com.rikkachiu.ecommerce_api.model.dto.ProductDTO;
 import com.rikkachiu.ecommerce_api.model.pojo.Product;
@@ -21,13 +22,27 @@ public class ProductDaoImpl implements ProductDao {
 
     // 查詢所有商品
     @Override
-    public List<Product> getProducts() {
+    public List<Product> getProducts(ProductCategory category, String search) {
         // sql 語法與欄位映射
-        String sql = "SELECT product_id, product_name, category, image_url, " +
+        StringBuilder sql = new StringBuilder("SELECT product_id, product_name, category, image_url, " +
                 "price, stock, description, created_date, last_modified_date " +
-                "FROM product";
+                "FROM product " +
+                "WHERE 1=1");
+        MapSqlParameterSource params = new MapSqlParameterSource();
 
-        return namedParameterJdbcTemplate.query(sql, new ProductRowMapper());
+        // 依據 category 添加篩選條件
+        if (category != null) {
+            sql.append(" AND category = :category");
+            params.addValue("category", category.name());
+        }
+
+        // 依據 search 添加篩選條件
+        if (search != null && !search.trim().isEmpty()) {
+            sql.append(" AND product_name LIKE :search");
+            params.addValue("search", "%" + search.trim() + "%");
+        }
+
+        return namedParameterJdbcTemplate.query(sql.toString(), params, new ProductRowMapper());
     }
 
     // 依 id 查詢商品

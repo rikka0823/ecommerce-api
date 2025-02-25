@@ -1,5 +1,6 @@
 package com.rikkachiu.ecommerce_api.service.product;
 
+import com.rikkachiu.ecommerce_api.constant.ProductCategory;
 import com.rikkachiu.ecommerce_api.model.dto.ProductDTO;
 import com.rikkachiu.ecommerce_api.model.pojo.Product;
 
@@ -8,7 +9,7 @@ import java.util.List;
 public interface ProductService {
 
     // 查詢所有商品
-    List<Product> getProducts();
+    List<Product> getProducts(ProductCategory category, String search);
 
     // 依 id 查詢商品
     Product getProductById(Integer productId);

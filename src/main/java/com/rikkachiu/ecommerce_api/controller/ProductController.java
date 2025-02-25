@@ -1,5 +1,6 @@
 package com.rikkachiu.ecommerce_api.controller;
 
+import com.rikkachiu.ecommerce_api.constant.ProductCategory;
 import com.rikkachiu.ecommerce_api.model.dto.ProductDTO;
 import com.rikkachiu.ecommerce_api.model.pojo.Product;
 import com.rikkachiu.ecommerce_api.service.product.ProductService;
@@ -19,8 +20,11 @@ public class ProductController {
 
     // 查詢所有商品
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts() {
-        return ResponseEntity.status(HttpStatus.OK).body(productService.getProducts());
+    public ResponseEntity<List<Product>> getProducts(
+            @RequestParam(required = false) ProductCategory category,
+            @RequestParam(required = false) String search
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.getProducts(category, search));
     }
 
     // 依 id 查詢商品
