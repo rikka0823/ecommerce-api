@@ -1,9 +1,13 @@
 package com.rikkachiu.ecommerce_api.dao.product;
 
 import com.rikkachiu.ecommerce_api.model.dto.ProductDTO;
+import com.rikkachiu.ecommerce_api.model.pojo.Product;
 
 public interface ProductDao {
 
     // 依 id 查詢商品
-    ProductDTO getProductById(Integer productId);
+    Product getProductById(Integer productId);
+
+    // 新增商品
+    Integer createProduct(ProductDTO productDTO);
 }

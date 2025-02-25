@@ -1,19 +1,19 @@
 package com.rikkachiu.ecommerce_api.mapper;
 
 import com.rikkachiu.ecommerce_api.constant.ProductCategory;
-import com.rikkachiu.ecommerce_api.model.dto.ProductDTO;
+import com.rikkachiu.ecommerce_api.model.pojo.Product;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ProductRowMapper implements RowMapper<ProductDTO> {
+public class ProductRowMapper implements RowMapper<Product> {
 
     @Override
-    public ProductDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
 
         //  product 欄位與物件映射
-        ProductDTO productDTO = ProductDTO.builder()
+        Product product = Product.builder()
                 .productId(rs.getInt("product_id"))
                 .productName(rs.getString("product_name"))
                 .category(ProductCategory.valueOf(rs.getString("category")))
@@ -25,6 +25,6 @@ public class ProductRowMapper implements RowMapper<ProductDTO> {
                 .lastModifiedDate(rs.getTimestamp("last_modified_date"))
                 .build();
 
-        return productDTO;
+        return product;
     }
 }

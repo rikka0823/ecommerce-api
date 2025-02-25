@@ -2,6 +2,7 @@ package com.rikkachiu.ecommerce_api.service.product;
 
 import com.rikkachiu.ecommerce_api.dao.product.ProductDao;
 import com.rikkachiu.ecommerce_api.model.dto.ProductDTO;
+import com.rikkachiu.ecommerce_api.model.pojo.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,13 @@ public class ProductServiceImpl implements ProductService {
 
     // 依 id 查詢商品
     @Override
-    public ProductDTO getProductById(Integer productId) {
+    public Product getProductById(Integer productId) {
         return productDao.getProductById(productId);
+    }
+
+    // 新增商品
+    @Override
+    public Integer createProduct(ProductDTO productDTO) {
+        return productDao.createProduct(productDTO);
     }
 }

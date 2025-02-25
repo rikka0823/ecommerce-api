@@ -4,21 +4,16 @@ import com.rikkachiu.ecommerce_api.constant.ProductCategory;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-import java.util.Date;
 
 @Data
-@Builder
 public class ProductDTO {
-
-    @NotNull
-    private int productId;
 
     @NotBlank
     private String productName;
 
+    @NotNull
     private ProductCategory category;
 
     @NotBlank
@@ -32,10 +27,4 @@ public class ProductDTO {
     private Integer stock;
 
     private String description;
-
-    @NotNull
-    private Date createdDate;
-
-    @NotNull
-    private Date lastModifiedDate;
 }
