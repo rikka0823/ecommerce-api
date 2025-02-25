@@ -1,8 +1,8 @@
 package com.rikkachiu.ecommerce_api.dao.product;
 
-import com.rikkachiu.ecommerce_api.constant.ProductCategory;
 import com.rikkachiu.ecommerce_api.mapper.ProductRowMapper;
 import com.rikkachiu.ecommerce_api.model.dto.ProductDTO;
+import com.rikkachiu.ecommerce_api.model.dto.ProductQueryParamsDTO;
 import com.rikkachiu.ecommerce_api.model.pojo.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -22,7 +22,7 @@ public class ProductDaoImpl implements ProductDao {
 
     // 查詢所有商品
     @Override
-    public List<Product> getProducts(ProductCategory category, String search) {
+    public List<Product> getProducts(ProductQueryParamsDTO productQueryParamsDTO) {
         // sql 語法與欄位映射
         StringBuilder sql = new StringBuilder("SELECT product_id, product_name, category, image_url, " +
                 "price, stock, description, created_date, last_modified_date " +
@@ -31,15 +31,15 @@ public class ProductDaoImpl implements ProductDao {
         MapSqlParameterSource params = new MapSqlParameterSource();
 
         // 依據 category 添加篩選條件
-        if (category != null) {
+        if (productQueryParamsDTO.getCategory() != null) {
             sql.append(" AND category = :category");
-            params.addValue("category", category.name());
+            params.addValue("category", productQueryParamsDTO.getCategory().name());
         }
 
         // 依據 search 添加篩選條件
-        if (search != null && !search.trim().isEmpty()) {
+        if (productQueryParamsDTO.getSearch() != null && !productQueryParamsDTO.getSearch().trim().isEmpty()) {
             sql.append(" AND product_name LIKE :search");
-            params.addValue("search", "%" + search.trim() + "%");
+            params.addValue("search", "%" + productQueryParamsDTO.getSearch().trim() + "%");
         }
 
         return namedParameterJdbcTemplate.query(sql.toString(), params, new ProductRowMapper());

@@ -1,7 +1,7 @@
 package com.rikkachiu.ecommerce_api.dao.product;
 
-import com.rikkachiu.ecommerce_api.constant.ProductCategory;
 import com.rikkachiu.ecommerce_api.model.dto.ProductDTO;
+import com.rikkachiu.ecommerce_api.model.dto.ProductQueryParamsDTO;
 import com.rikkachiu.ecommerce_api.model.pojo.Product;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 public interface ProductDao {
 
     // 查詢所有商品
-    List<Product> getProducts(ProductCategory category, String search);
+    List<Product> getProducts(ProductQueryParamsDTO productQueryParamsDTO);
 
     // 依 id 查詢商品
     Product getProductById(Integer productId);

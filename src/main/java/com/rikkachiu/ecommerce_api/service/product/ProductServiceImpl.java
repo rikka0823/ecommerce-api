@@ -1,8 +1,8 @@
 package com.rikkachiu.ecommerce_api.service.product;
 
-import com.rikkachiu.ecommerce_api.constant.ProductCategory;
 import com.rikkachiu.ecommerce_api.dao.product.ProductDao;
 import com.rikkachiu.ecommerce_api.model.dto.ProductDTO;
+import com.rikkachiu.ecommerce_api.model.dto.ProductQueryParamsDTO;
 import com.rikkachiu.ecommerce_api.model.pojo.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +17,8 @@ public class ProductServiceImpl implements ProductService {
 
     // 查詢所有商品
     @Override
-    public List<Product> getProducts(ProductCategory category, String search) {
-        return productDao.getProducts(category, search);
+    public List<Product> getProducts(ProductQueryParamsDTO productQueryParamsDTO) {
+        return productDao.getProducts(productQueryParamsDTO);
     }
 
     // 依 id 查詢商品

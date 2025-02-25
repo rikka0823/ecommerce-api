@@ -2,6 +2,7 @@ package com.rikkachiu.ecommerce_api.controller;
 
 import com.rikkachiu.ecommerce_api.constant.ProductCategory;
 import com.rikkachiu.ecommerce_api.model.dto.ProductDTO;
+import com.rikkachiu.ecommerce_api.model.dto.ProductQueryParamsDTO;
 import com.rikkachiu.ecommerce_api.model.pojo.Product;
 import com.rikkachiu.ecommerce_api.service.product.ProductService;
 import jakarta.validation.Valid;
@@ -24,7 +25,12 @@ public class ProductController {
             @RequestParam(required = false) ProductCategory category,
             @RequestParam(required = false) String search
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(productService.getProducts(category, search));
+        ProductQueryParamsDTO productQueryParamsDTO = ProductQueryParamsDTO.builder()
+                .category(category)
+                .search(search)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(productService.getProducts(productQueryParamsDTO));
     }
 
     // 依 id 查詢商品

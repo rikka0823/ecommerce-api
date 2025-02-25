@@ -1,0 +1,13 @@
+package com.rikkachiu.ecommerce_api.model.dto;
+
+import com.rikkachiu.ecommerce_api.constant.ProductCategory;
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class ProductQueryParamsDTO {
+
+    private ProductCategory category;
+    private String search;
+}
