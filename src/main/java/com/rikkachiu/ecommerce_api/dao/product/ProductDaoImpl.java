@@ -68,9 +68,9 @@ public class ProductDaoImpl implements ProductDao {
         return id;
     }
 
-    // 更新商品
+    // 依 id 更新商品
     @Override
-    public void updateProduct(Integer id, ProductDTO productDTO) {
+    public void updateProduct(Integer productId, ProductDTO productDTO) {
 
         // sql 語法與欄位映射
         String sql = "UPDATE product " +
@@ -85,9 +85,22 @@ public class ProductDaoImpl implements ProductDao {
                 .addValue("stock", productDTO.getStock())
                 .addValue("description", productDTO.getDescription())
                 .addValue("lastModifiedDate", new Date())
-                .addValue("productId", id);
+                .addValue("productId", productId);
 
         // 更新商品
+        namedParameterJdbcTemplate.update(sql, params);
+    }
+
+    // 依 id 刪除商品
+    @Override
+    public void deleteProductById(Integer productId) {
+
+        // sql 語法與欄位映射
+        String sql = "DELETE FROM product WHERE product_id = :productId";
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("productId", productId);
+
+        // 刪除商品
         namedParameterJdbcTemplate.update(sql, params);
     }
 }

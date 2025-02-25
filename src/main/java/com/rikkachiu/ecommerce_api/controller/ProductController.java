@@ -42,7 +42,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 
-    // 更新商品
+    // 依 id 更新商品
     @PutMapping("/products/{productId}")
     public ResponseEntity<Product> updateProduct(@PathVariable Integer productId,
                                                  @RequestBody @Valid ProductDTO productDTO) {
@@ -57,5 +57,15 @@ public class ProductController {
         Product product = productService.getProductById(productId);
 
         return ResponseEntity.status(HttpStatus.OK).body(product);
+    }
+
+    // 依 id 刪除商品
+    @DeleteMapping("/products/{productId}")
+    public ResponseEntity<?> deleteProductById(@PathVariable Integer productId) {
+
+        // 刪除商品
+        productService.deleteProductById(productId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

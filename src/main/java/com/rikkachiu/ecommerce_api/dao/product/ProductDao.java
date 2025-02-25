@@ -11,6 +11,9 @@ public interface ProductDao {
     // 新增商品
     Integer createProduct(ProductDTO productDTO);
 
-    // 更新商品
+    // 依 id 更新商品
     void updateProduct(Integer id, ProductDTO productDTO);
+
+    // 依 id 刪除商品
+    void deleteProductById(Integer productId);
 }
