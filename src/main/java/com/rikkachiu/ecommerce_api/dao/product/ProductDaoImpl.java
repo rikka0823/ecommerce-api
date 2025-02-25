@@ -67,4 +67,27 @@ public class ProductDaoImpl implements ProductDao {
 
         return id;
     }
+
+    // 更新商品
+    @Override
+    public void updateProduct(Integer id, ProductDTO productDTO) {
+
+        // sql 語法與欄位映射
+        String sql = "UPDATE product " +
+                "SET product_name = :productName, category = :category, image_url = :imageUrl, price = :price, " +
+                "stock = :stock, description = :description, last_modified_date = :lastModifiedDate " +
+                "WHERE product_id = :productId";
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("productName", productDTO.getProductName())
+                .addValue("category", productDTO.getCategory().name())
+                .addValue("imageUrl", productDTO.getImageUrl())
+                .addValue("price", productDTO.getPrice())
+                .addValue("stock", productDTO.getStock())
+                .addValue("description", productDTO.getDescription())
+                .addValue("lastModifiedDate", new Date())
+                .addValue("productId", id);
+
+        // 更新商品
+        namedParameterJdbcTemplate.update(sql, params);
+    }
 }

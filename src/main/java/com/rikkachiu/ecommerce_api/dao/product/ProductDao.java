@@ -10,4 +10,7 @@ public interface ProductDao {
 
     // 新增商品
     Integer createProduct(ProductDTO productDTO);
+
+    // 更新商品
+    void updateProduct(Integer id, ProductDTO productDTO);
 }
