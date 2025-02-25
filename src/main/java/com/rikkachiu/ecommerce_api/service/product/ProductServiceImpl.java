@@ -6,11 +6,19 @@ import com.rikkachiu.ecommerce_api.model.pojo.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductDao productDao;
+
+    // 查詢所有商品
+    @Override
+    public List<Product> getProducts() {
+        return productDao.getProducts();
+    }
 
     // 依 id 查詢商品
     @Override

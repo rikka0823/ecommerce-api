@@ -19,10 +19,20 @@ public class ProductDaoImpl implements ProductDao {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    // 查詢所有商品
+    @Override
+    public List<Product> getProducts() {
+        // sql 語法與欄位映射
+        String sql = "SELECT product_id, product_name, category, image_url, " +
+                "price, stock, description, created_date, last_modified_date " +
+                "FROM product";
+
+        return namedParameterJdbcTemplate.query(sql, new ProductRowMapper());
+    }
+
     // 依 id 查詢商品
     @Override
     public Product getProductById(Integer productId) {
-
         // sql 語法與欄位映射
         String sql = "SELECT product_id, product_name, category, image_url, " +
                 "price, stock, description, created_date, last_modified_date " +
@@ -44,7 +54,6 @@ public class ProductDaoImpl implements ProductDao {
     // 新增商品
     @Override
     public Integer createProduct(ProductDTO productDTO) {
-
         // sql 語法與欄位映射
         String sql = "INSERT INTO product (product_name, category, image_url, price, stock, " +
                 "description, created_date, last_modified_date) " +
@@ -71,7 +80,6 @@ public class ProductDaoImpl implements ProductDao {
     // 依 id 更新商品
     @Override
     public void updateProduct(Integer productId, ProductDTO productDTO) {
-
         // sql 語法與欄位映射
         String sql = "UPDATE product " +
                 "SET product_name = :productName, category = :category, image_url = :imageUrl, price = :price, " +
@@ -94,7 +102,6 @@ public class ProductDaoImpl implements ProductDao {
     // 依 id 刪除商品
     @Override
     public void deleteProductById(Integer productId) {
-
         // sql 語法與欄位映射
         String sql = "DELETE FROM product WHERE product_id = :productId";
         MapSqlParameterSource params = new MapSqlParameterSource()
