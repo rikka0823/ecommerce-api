@@ -12,6 +12,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Repository
@@ -19,6 +20,33 @@ public class ProductDaoImpl implements ProductDao {
 
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    // 查詢商品總數
+    @Override
+    public Integer getProductCount(ProductQueryParamsDTO productQueryParamsDTO) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM product WHERE 1=1");
+        MapSqlParameterSource params = new MapSqlParameterSource();
+
+        // 依據 category 添加篩選條件
+        if (productQueryParamsDTO.getCategory() != null) {
+            sql.append(" AND category = :category");
+            params.addValue("category", productQueryParamsDTO.getCategory().name());
+        }
+
+        // 依據 search 添加篩選條件
+        if (productQueryParamsDTO.getSearch() != null &&
+                !productQueryParamsDTO.getSearch().trim().isEmpty()) {
+            sql.append(" AND product_name LIKE :search");
+            params.addValue("search", "%" + productQueryParamsDTO.getSearch().trim() + "%");
+        }
+
+        Integer count = namedParameterJdbcTemplate.queryForObject(sql.toString(), params, Integer.class);
+        if (count == null) {
+            count = 0;
+        }
+
+        return count;
+    }
 
     // 查詢所有商品
     @Override

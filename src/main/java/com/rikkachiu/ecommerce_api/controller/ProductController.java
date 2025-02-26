@@ -3,6 +3,7 @@ package com.rikkachiu.ecommerce_api.controller;
 import com.rikkachiu.ecommerce_api.constant.ProductCategory;
 import com.rikkachiu.ecommerce_api.constant.ProductOrderBy;
 import com.rikkachiu.ecommerce_api.constant.ProductSort;
+import com.rikkachiu.ecommerce_api.model.dto.PageDTO;
 import com.rikkachiu.ecommerce_api.model.dto.ProductDTO;
 import com.rikkachiu.ecommerce_api.model.dto.ProductQueryParamsDTO;
 import com.rikkachiu.ecommerce_api.model.pojo.Product;
@@ -27,7 +28,7 @@ public class ProductController {
 
     // 查詢所有商品
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts(
+    public ResponseEntity<PageDTO<Product>> getProducts(
             // filtering
             @RequestParam(required = false) ProductCategory category,
             @RequestParam(required = false) String search,
@@ -58,7 +59,14 @@ public class ProductController {
                 .offset(offset)
                 .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(productService.getProducts(productQueryParamsDTO));
+        // 將 返回資料封裝在 PageDTO<Product>
+        PageDTO<Product> pageDTO =  new PageDTO<>();
+        pageDTO.setLimit(limit);
+        pageDTO.setOffset(offset);
+        pageDTO.setTotal(productService.getProductCount(productQueryParamsDTO));
+        pageDTO.setResults(productService.getProducts(productQueryParamsDTO));
+
+        return ResponseEntity.status(HttpStatus.OK).body(pageDTO);
     }
 
     // 依 id 查詢商品
