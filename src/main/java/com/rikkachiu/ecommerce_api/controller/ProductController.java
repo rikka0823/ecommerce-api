@@ -1,6 +1,8 @@
 package com.rikkachiu.ecommerce_api.controller;
 
 import com.rikkachiu.ecommerce_api.constant.ProductCategory;
+import com.rikkachiu.ecommerce_api.constant.ProductOrderBy;
+import com.rikkachiu.ecommerce_api.constant.ProductSort;
 import com.rikkachiu.ecommerce_api.model.dto.ProductDTO;
 import com.rikkachiu.ecommerce_api.model.dto.ProductQueryParamsDTO;
 import com.rikkachiu.ecommerce_api.model.pojo.Product;
@@ -22,12 +24,28 @@ public class ProductController {
     // 查詢所有商品
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getProducts(
+            // filtering
             @RequestParam(required = false) ProductCategory category,
-            @RequestParam(required = false) String search
+            @RequestParam(required = false) String search,
+
+            // sorting
+            @RequestParam(required = false) ProductOrderBy orderBy,
+            @RequestParam(required = false) ProductSort sort
     ) {
+        // sorting 預設值
+        if (orderBy == null) {
+            orderBy = ProductOrderBy.LAST_MODIFIED_DATE;
+        }
+        if (sort == null) {
+            sort = ProductSort.DESC;
+        }
+
+        // 將查詢參數封裝
         ProductQueryParamsDTO productQueryParamsDTO = ProductQueryParamsDTO.builder()
                 .category(category)
                 .search(search)
+                .orderBy(orderBy.name().toLowerCase())
+                .sort(sort.name())
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(productService.getProducts(productQueryParamsDTO));

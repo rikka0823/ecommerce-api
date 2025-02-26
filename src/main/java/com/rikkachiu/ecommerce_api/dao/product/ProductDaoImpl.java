@@ -37,10 +37,17 @@ public class ProductDaoImpl implements ProductDao {
         }
 
         // 依據 search 添加篩選條件
-        if (productQueryParamsDTO.getSearch() != null && !productQueryParamsDTO.getSearch().trim().isEmpty()) {
+        if (productQueryParamsDTO.getSearch() != null &&
+                !productQueryParamsDTO.getSearch().trim().isEmpty()) {
             sql.append(" AND product_name LIKE :search");
             params.addValue("search", "%" + productQueryParamsDTO.getSearch().trim() + "%");
         }
+
+        // 依據 orderBy, sort 排序
+        sql.append(" ORDER BY ")
+                .append(productQueryParamsDTO.getOrderBy())
+                .append(" ")
+                .append(productQueryParamsDTO.getSort());
 
         return namedParameterJdbcTemplate.query(sql.toString(), params, new ProductRowMapper());
     }
