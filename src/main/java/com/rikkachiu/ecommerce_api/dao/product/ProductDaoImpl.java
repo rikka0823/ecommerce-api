@@ -49,6 +49,11 @@ public class ProductDaoImpl implements ProductDao {
                 .append(" ")
                 .append(productQueryParamsDTO.getSort());
 
+        // 依據 limit, offset 分頁
+        sql.append(" LIMIT :limit OFFSET :offset");
+        params.addValue("limit", productQueryParamsDTO.getLimit());
+        params.addValue("offset", productQueryParamsDTO.getOffset());
+
         return namedParameterJdbcTemplate.query(sql.toString(), params, new ProductRowMapper());
     }
 

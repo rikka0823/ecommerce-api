@@ -8,13 +8,17 @@ import com.rikkachiu.ecommerce_api.model.dto.ProductQueryParamsDTO;
 import com.rikkachiu.ecommerce_api.model.pojo.Product;
 import com.rikkachiu.ecommerce_api.service.product.ProductService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
 @RestController
 public class ProductController {
 
@@ -30,7 +34,11 @@ public class ProductController {
 
             // sorting
             @RequestParam(required = false) ProductOrderBy orderBy,
-            @RequestParam(required = false) ProductSort sort
+            @RequestParam(required = false) ProductSort sort,
+
+            // pagination
+            @RequestParam(defaultValue = "5") @Max(25) @Min(0) Integer limit,
+            @RequestParam(defaultValue = "0") @Min(0) Integer offset
     ) {
         // sorting 預設值
         if (orderBy == null) {
@@ -46,6 +54,8 @@ public class ProductController {
                 .search(search)
                 .orderBy(orderBy.name().toLowerCase())
                 .sort(sort.name())
+                .limit(limit)
+                .offset(offset)
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(productService.getProducts(productQueryParamsDTO));
