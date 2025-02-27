@@ -21,12 +21,8 @@ public class ProductDaoImpl implements ProductDao {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    // 查詢商品總數
-    @Override
-    public Integer getProductCount(ProductQueryParamsDTO productQueryParamsDTO) {
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM product WHERE 1=1");
-        MapSqlParameterSource params = new MapSqlParameterSource();
-
+    //新增篩選條件 sql
+    private void addFilteringSql(ProductQueryParamsDTO productQueryParamsDTO, StringBuilder sql, MapSqlParameterSource params) {
         // 依據 category 添加篩選條件
         if (productQueryParamsDTO.getCategory() != null) {
             sql.append(" AND category = :category");
@@ -39,7 +35,19 @@ public class ProductDaoImpl implements ProductDao {
             sql.append(" AND product_name LIKE :search");
             params.addValue("search", "%" + productQueryParamsDTO.getSearch().trim() + "%");
         }
+    }
 
+    // 查詢商品總數
+    @Override
+    public Integer getProductCount(ProductQueryParamsDTO productQueryParamsDTO) {
+        // sql 語法與欄位映射
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM product WHERE 1=1");
+        MapSqlParameterSource params = new MapSqlParameterSource();
+
+        //新增篩選條件 sql
+        addFilteringSql(productQueryParamsDTO, sql, params);
+
+        // 取得商品總數
         Integer count = namedParameterJdbcTemplate.queryForObject(sql.toString(), params, Integer.class);
         if (count == null) {
             count = 0;
@@ -58,18 +66,8 @@ public class ProductDaoImpl implements ProductDao {
                 "WHERE 1=1");
         MapSqlParameterSource params = new MapSqlParameterSource();
 
-        // 依據 category 添加篩選條件
-        if (productQueryParamsDTO.getCategory() != null) {
-            sql.append(" AND category = :category");
-            params.addValue("category", productQueryParamsDTO.getCategory().name());
-        }
-
-        // 依據 search 添加篩選條件
-        if (productQueryParamsDTO.getSearch() != null &&
-                !productQueryParamsDTO.getSearch().trim().isEmpty()) {
-            sql.append(" AND product_name LIKE :search");
-            params.addValue("search", "%" + productQueryParamsDTO.getSearch().trim() + "%");
-        }
+        //新增篩選條件 sql
+        addFilteringSql(productQueryParamsDTO, sql, params);
 
         // 依據 orderBy, sort 排序
         sql.append(" ORDER BY ")
