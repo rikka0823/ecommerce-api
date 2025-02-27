@@ -24,7 +24,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    // 查詢所有商品
+    // 查詢所有商品，依不同條件
     @GetMapping("/products")
     public ResponseEntity<PageDTO<Product>> getProducts(
             // filtering

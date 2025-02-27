@@ -11,7 +11,6 @@ public class ProductRowMapper implements RowMapper<Product> {
 
     @Override
     public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
-
         //  product 欄位與物件映射
         Product product = Product.builder()
                 .productId(rs.getInt("product_id"))

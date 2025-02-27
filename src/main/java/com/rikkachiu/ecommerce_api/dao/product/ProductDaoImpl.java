@@ -55,7 +55,7 @@ public class ProductDaoImpl implements ProductDao {
         return count;
     }
 
-    // 查詢所有商品
+    // 查詢所有商品，依不同條件
     @Override
     public List<Product> getProducts(ProductQueryParamsDTO productQueryParamsDTO) {
         // sql 語法與欄位映射

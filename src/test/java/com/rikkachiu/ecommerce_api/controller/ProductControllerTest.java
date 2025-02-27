@@ -27,7 +27,7 @@ public class ProductControllerTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    // 獲取所有產品，無任何參數
+    // 查詢所有產品，無任何參數
     @Test
     public void getProducts() throws Exception {
         // 設定請求路徑
@@ -45,7 +45,7 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.results", hasSize(5)));
     }
 
-    // 獲取所有產品，filtering 篩選
+    // 查詢所有產品，filtering 篩選
     @Test
     public void getProductsByFiltering() throws Exception {
         // 設定請求路徑、參數
@@ -65,7 +65,7 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.results", hasSize(3)));
     }
 
-    // 獲取所有產品，sorting 篩選
+    // 查詢所有產品，sorting 篩選
     @Test
     public void getProductsBySorting() throws Exception {
         // 設定請求路徑、參數
@@ -88,7 +88,7 @@ public class ProductControllerTest {
     }
 
 
-    // 獲取所有產品，pagination 篩選
+    // 查詢所有產品，pagination 篩選
     @Test
     public void getProductsByPagination() throws Exception {
         // 設定請求路徑、參數

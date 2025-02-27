@@ -11,7 +11,7 @@ public interface ProductDao {
     // 查詢商品總數
     Integer getProductCount(ProductQueryParamsDTO productQueryParamsDTO);
 
-    // 查詢所有商品
+    // 查詢所有商品，依不同條件
     List<Product> getProducts(ProductQueryParamsDTO productQueryParamsDTO);
 
     // 依 id 查詢商品

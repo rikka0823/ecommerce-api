@@ -21,7 +21,7 @@ public class ProductServiceImpl implements ProductService {
         return productDao.getProductCount(productQueryParamsDTO);
     }
 
-    // 查詢所有商品
+    // 查詢所有商品，依不同條件
     @Override
     public List<Product> getProducts(ProductQueryParamsDTO productQueryParamsDTO) {
         return productDao.getProducts(productQueryParamsDTO);
