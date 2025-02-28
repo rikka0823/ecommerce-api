@@ -10,4 +10,7 @@ public interface UserService {
 
     // 建立帳號
     Integer register(UserDTO userDTO);
+
+    // 登入
+    User login(UserDTO userDTO);
 }

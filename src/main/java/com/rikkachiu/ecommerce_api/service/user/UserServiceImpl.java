@@ -35,4 +35,25 @@ public class UserServiceImpl implements UserService {
 
         return userDao.createUser(userDTO);
     }
+
+    // 登入
+    @Override
+    public User login(UserDTO userDTO) {
+        // 依 email 取得用戶資訊
+        User user = userDao.getUserByEmail(userDTO.getEmail());
+
+        // 檢查 email 是否註冊
+        if (user == null) {
+            logger.warn("email: {} 尚未註冊", userDTO.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        // 驗證密碼
+        if (!user.getPassword().equals(userDTO.getPassword())) {
+            logger.warn("email: {} 登入密碼錯誤", userDTO.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        return user;
+    }
 }

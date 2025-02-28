@@ -31,4 +31,10 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
+
+    // 登入
+    @PostMapping("/users/login")
+    public ResponseEntity<User> login(@RequestBody @Valid UserDTO userDTO) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.login(userDTO));
+    }
 }
