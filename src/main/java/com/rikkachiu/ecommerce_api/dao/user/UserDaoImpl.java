@@ -23,7 +23,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getUserById(Integer userId) {
         // sql 語法與欄位映射
-        String sql = "SELECT user_id, email, password, created_date, last_modified_date FROM user WHERE user_id = :userId";
+        String sql = "SELECT user_id, email, password, created_date, last_modified_date FROM `user` WHERE user_id = :userId";
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("userId", userId);
 
@@ -41,7 +41,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getUserByEmail(String email) {
         // sql 語法與欄位映射
-        String sql = "SELECT user_id, email, password, created_date, last_modified_date FROM user WHERE email = :email";
+        String sql = "SELECT user_id, email, password, created_date, last_modified_date FROM `user` WHERE email = :email";
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("email", email);
 
@@ -59,7 +59,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Integer createUser(UserDTO userDTO) {
         // sql 語法與欄位映射
-        String sql = "INSERT INTO user (email, password, created_date, last_modified_date) " +
+        String sql = "INSERT INTO `user` (email, password, created_date, last_modified_date) " +
                 "VALUES (:email, :password, :createdDate, :lastModifiedDate);";
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("email", userDTO.getEmail())
