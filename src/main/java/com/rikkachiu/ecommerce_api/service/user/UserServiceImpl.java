@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -33,6 +34,9 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
+        // 密碼雜湊
+        userDTO.setPassword(DigestUtils.md5DigestAsHex(userDTO.getPassword().getBytes()));
+
         return userDao.createUser(userDTO);
     }
 
@@ -49,7 +53,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // 驗證密碼
-        if (!user.getPassword().equals(userDTO.getPassword())) {
+        if (!user.getPassword().equals(DigestUtils.md5DigestAsHex(userDTO.getPassword().getBytes()))) {
             logger.warn("email: {} 登入密碼錯誤", userDTO.getEmail());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
