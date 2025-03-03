@@ -55,6 +55,22 @@ public class ProductDaoImpl implements ProductDao {
         return count;
     }
 
+    // 依 id 取得商品價格
+    @Override
+    public List<Integer> getProductPrices(List<Integer> productIdList) {
+        // sql 語法與欄位映射
+        String sql = "SELECT price FROM product WHERE product_id IN (:productIdList)";
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("productIdList", productIdList);
+
+        // 取得商品價格
+        List<Integer> prices = namedParameterJdbcTemplate.query(sql, params,
+                (rs, rowNum) -> rs.getInt("price")
+        );
+
+        return prices;
+    }
+
     // 查詢所有商品，依不同條件
     @Override
     public List<Product> getProducts(ProductQueryParamsDTO productQueryParamsDTO) {
