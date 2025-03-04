@@ -55,22 +55,6 @@ public class ProductDaoImpl implements ProductDao {
         return count;
     }
 
-    // 依 id 取得商品價格
-    @Override
-    public List<Integer> getProductPrices(List<Integer> productIdList) {
-        // sql 語法與欄位映射
-        String sql = "SELECT price FROM product WHERE product_id IN (:productIdList)";
-        MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("productIdList", productIdList);
-
-        // 取得商品價格
-        List<Integer> prices = namedParameterJdbcTemplate.query(sql, params,
-                (rs, rowNum) -> rs.getInt("price")
-        );
-
-        return prices;
-    }
-
     // 查詢所有商品，依不同條件
     @Override
     public List<Product> getProducts(ProductQueryParamsDTO productQueryParamsDTO) {
@@ -165,6 +149,25 @@ public class ProductDaoImpl implements ProductDao {
 
         // 更新商品
         namedParameterJdbcTemplate.update(sql, params);
+    }
+
+    // 批量更新商品庫存
+    @Override
+    public void updateProductStock(List<Product> productList) {
+        // sql 語法與欄位映射
+        String sql = "UPDATE product SET stock = :stock, last_modified_date = :lastModifiedDate " +
+                "WHERE product_id = :productId";
+        MapSqlParameterSource[] params = new MapSqlParameterSource[productList.size()];
+        for (int i = 0; i < productList.size(); i++) {
+            Product product = productList.get(i);
+            params[i] = new MapSqlParameterSource()
+                    .addValue("stock", product.getStock())
+                    .addValue("lastModifiedDate", new Date())
+                    .addValue("productId", product.getProductId());
+        }
+
+        // 批量更新商品庫存
+        namedParameterJdbcTemplate.batchUpdate(sql, params);
     }
 
     // 依 id 刪除商品

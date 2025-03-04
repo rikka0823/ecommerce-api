@@ -11,9 +11,6 @@ public interface ProductDao {
     // 查詢商品總數
     Integer getProductCount(ProductQueryParamsDTO productQueryParamsDTO);
 
-    // 依 id 取得商品價格
-    List<Integer> getProductPrices(List<Integer> productIdList);
-
     // 查詢所有商品，依不同條件
     List<Product> getProducts(ProductQueryParamsDTO productQueryParamsDTO);
 
@@ -25,6 +22,9 @@ public interface ProductDao {
 
     // 依 id 更新商品
     void updateProduct(Integer id, ProductDTO productDTO);
+
+    // 批量更新商品庫存
+    void updateProductStock(List<Product> productList);
 
     // 依 id 刪除商品
     void deleteProductById(Integer productId);
