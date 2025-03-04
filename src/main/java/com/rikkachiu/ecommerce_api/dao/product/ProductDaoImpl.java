@@ -21,7 +21,8 @@ public class ProductDaoImpl implements ProductDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     //新增篩選條件 sql
-    private void addFilteringSql(ProductQueryParamsDTO productQueryParamsDTO, StringBuilder sql, MapSqlParameterSource params) {
+    private void addFilteringSql(ProductQueryParamsDTO productQueryParamsDTO, StringBuilder sql,
+                                 MapSqlParameterSource params) {
         // 依據 category 添加篩選條件
         if (productQueryParamsDTO.getCategory() != null) {
             sql.append(" AND category = :category");
@@ -76,8 +77,8 @@ public class ProductDaoImpl implements ProductDao {
 
         // 依據 limit, offset 分頁
         sql.append(" LIMIT :limit OFFSET :offset");
-        params.addValue("limit", productQueryParamsDTO.getLimit());
-        params.addValue("offset", productQueryParamsDTO.getOffset());
+        params.addValue("limit", productQueryParamsDTO.getLimit())
+                .addValue("offset", productQueryParamsDTO.getOffset());
 
         return namedParameterJdbcTemplate.query(sql.toString(), params, new ProductRowMapper());
     }

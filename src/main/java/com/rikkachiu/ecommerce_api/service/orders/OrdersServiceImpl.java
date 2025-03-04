@@ -5,6 +5,7 @@ import com.rikkachiu.ecommerce_api.dao.product.ProductDao;
 import com.rikkachiu.ecommerce_api.dao.user.UserDao;
 import com.rikkachiu.ecommerce_api.model.dto.BuyItemDTO;
 import com.rikkachiu.ecommerce_api.model.dto.OrdersDTO;
+import com.rikkachiu.ecommerce_api.model.dto.OrdersQueryParamsDTO;
 import com.rikkachiu.ecommerce_api.model.pojo.OrderItem;
 import com.rikkachiu.ecommerce_api.model.pojo.Orders;
 import com.rikkachiu.ecommerce_api.model.pojo.Product;
@@ -33,15 +34,20 @@ public class OrdersServiceImpl implements OrdersService {
     @Autowired
     private UserDao userDao;
 
+    // 檢查 userId 是否存在
+    private void existsById(Integer userId) {
+        if (userDao.getUserById(userId) == null) {
+            logger.warn("userId: {} 不存在", userId);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "查無此 userId: " + userId);
+        }
+    }
+
     // 創建訂單
     @Transactional
     @Override
     public Integer createOrders(Integer userId, OrdersDTO ordersDTO) {
         // 檢查 userId 是否存在
-        if (userDao.getUserById(userId) == null) {
-            logger.warn("userId: {} 不存在", userId);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "查無此 userId: " + userId);
-        }
+        existsById(userId);
 
         // 建立 list 儲存 OrderItem、Product
         List<OrderItem> orderItemList = new ArrayList<>();
@@ -61,8 +67,8 @@ public class OrdersServiceImpl implements OrdersService {
                         buyItemDTO.getProductId(), product.getStock(), buyItemDTO.getQuantity());
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "\n此 productId 庫存量不足: " + buyItemDTO.getProductId() +
-                        "\n庫存量: " + product.getStock() +
-                        "\n購買量: " + buyItemDTO.getQuantity());
+                                "\n庫存量: " + product.getStock() +
+                                "\n購買量: " + buyItemDTO.getQuantity());
             }
 
             // 計算 order_item 的 amount、訂單總金額
@@ -105,5 +111,28 @@ public class OrdersServiceImpl implements OrdersService {
         orders.setOrderItemList(ordersDao.getOrderItemsById(orderId));
 
         return orders;
+    }
+
+    // 查詢訂單總數
+    @Override
+    public Integer getOrdersCount(Integer userId) {
+        // 檢查 userId 是否存在
+        existsById(userId);
+        return ordersDao.getOrdersCount(userId);
+    }
+
+    // 查詢所有訂單，依不同條件
+    @Override
+    public List<Orders> getOrders(Integer userId, OrdersQueryParamsDTO ordersQueryParamsDTO) {
+        // 檢查 userId 是否存在
+        existsById(userId);
+
+        // 封裝 List<Orders>
+        List<Orders> ordersList = ordersDao.getOrders(userId, ordersQueryParamsDTO);
+        for (Orders orders : ordersList) {
+            orders.setOrderItemList(ordersDao.getOrderItemsById(userId));
+        }
+
+        return ordersList;
     }
 }

@@ -2,6 +2,7 @@ package com.rikkachiu.ecommerce_api.dao.orders;
 
 import com.rikkachiu.ecommerce_api.mapper.OrderItemRowMapper;
 import com.rikkachiu.ecommerce_api.mapper.OrdersRowMapper;
+import com.rikkachiu.ecommerce_api.model.dto.OrdersQueryParamsDTO;
 import com.rikkachiu.ecommerce_api.model.pojo.OrderItem;
 import com.rikkachiu.ecommerce_api.model.pojo.Orders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,5 +93,55 @@ public class OrdersDaoImpl implements OrdersDao {
                 .addValue("orderId", orderId);
 
         return namedParameterJdbcTemplate.query(sql, params, new OrderItemRowMapper());
+    }
+
+    //新增篩選條件 sql
+    private void addFilteringSql(Integer userId,  StringBuilder sql,
+                                 MapSqlParameterSource params) {
+        sql.append(" AND user_id = :userId");
+        params.addValue("userId", userId);
+    }
+
+    // 查詢訂單總數
+    @Override
+    public Integer getOrdersCount(Integer userId) {
+        // sql 語法與欄位映射
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM orders WHERE 1 = 1");
+        MapSqlParameterSource params = new MapSqlParameterSource();
+
+        //新增篩選條件 sql
+        addFilteringSql(userId, sql, params);
+
+        // 取得商品總數
+        Integer count = namedParameterJdbcTemplate.queryForObject(sql.toString(), params, Integer.class);
+        if (count == null) {
+            return 0;
+        }
+
+        return count;
+    }
+
+    // 查詢所有訂單，依不同條件
+    @Override
+    public List<Orders> getOrders(Integer userId, OrdersQueryParamsDTO ordersQueryParamsDTO) {
+        // sql 語法與欄位映射
+        StringBuilder sql = new StringBuilder("SELECT order_id, user_id, total_amount, created_date, last_modified_date " +
+                "FROM orders " +
+                "WHERE 1 = 1");
+        MapSqlParameterSource params = new MapSqlParameterSource();
+
+        // 新增篩選條件 sql
+        addFilteringSql(userId, sql, params);
+
+        // 依據 orderBy, sort 排序
+        sql.append(" ORDER BY last_modified_date DESC")
+                .append(" LIMIT ")
+                .append(":limit")
+                .append(" OFFSET ")
+                .append(":offset");
+        params.addValue("limit",ordersQueryParamsDTO.getLimit())
+                .addValue("offset", ordersQueryParamsDTO.getOffset());
+
+        return namedParameterJdbcTemplate.query(sql.toString(), params, new OrdersRowMapper());
     }
 }
