@@ -6,3 +6,22 @@ INSERT INTO product (product_name, category, image_url, price, stock, descriptio
 INSERT INTO product (product_name, category, image_url, price, stock, description, created_date, last_modified_date) VALUES ('BMW', 'CAR', 'https://cdn.pixabay.com/photo/2018/02/21/03/15/bmw-m4-3169357_1280.jpg', 500000, 3, '渦輪增壓，直列4缸，DOHC雙凸輪軸，16氣門', '2022-03-20 12:30:00', '2022-03-20 12:30:00');
 INSERT INTO product (product_name, category, image_url, price, stock, description, created_date, last_modified_date) VALUES ('Benz', 'CAR', 'https://cdn.pixabay.com/photo/2017/03/27/14/56/auto-2179220_1280.jpg', 600000, 2, null, '2022-03-21 20:10:00', '2022-03-22 10:50:00');
 INSERT INTO product (product_name, category, image_url, price, stock, description, created_date, last_modified_date) VALUES ('Tesla', 'CAR', 'https://cdn.pixabay.com/photo/2021/01/15/16/49/tesla-5919764_1280.jpg', 450000, 5, '世界最暢銷的充電式汽車', '2022-03-21 23:30:00', '2022-03-21 23:30:00');
+
+--user
+INSERT INTO `user` (user_id, email, password, created_date, last_modified_date) VALUES (13,'test5@gmail.com','828c88f34ecb4c1ca8d89e018c6fad1a','2025-02-28 19:14:07','2025-02-28 19:14:07');
+
+--order_item
+INSERT INTO order_item (order_item_id, order_id, product_id, quantity, amount) VALUES (36,14,1,1,30);
+INSERT INTO order_item (order_item_id, order_id, product_id, quantity, amount) VALUES (37,14,3,1,10);
+INSERT INTO order_item (order_item_id, order_id, product_id, quantity, amount) VALUES (38,14,4,1,100000);
+INSERT INTO order_item (order_item_id, order_id, product_id, quantity, amount) VALUES (39,15,1,1,30);
+INSERT INTO order_item (order_item_id, order_id, product_id, quantity, amount) VALUES (40,15,2,1,300);
+INSERT INTO order_item (order_item_id, order_id, product_id, quantity, amount) VALUES (41,15,4,1,100000);
+INSERT INTO order_item (order_item_id, order_id, product_id, quantity, amount) VALUES (42,16,1,1,30);
+INSERT INTO order_item (order_item_id, order_id, product_id, quantity, amount) VALUES (43,16,1,1,30);
+INSERT INTO order_item (order_item_id, order_id, product_id, quantity, amount) VALUES (44,16,4,1,100000);
+
+--orders
+INSERT INTO orders (order_id, user_id, total_amount, created_date, last_modified_date) VALUES (14,13,100040,'2025-03-03 18:42:44','2025-03-03 18:42:44');
+INSERT INTO orders (order_id, user_id, total_amount, created_date, last_modified_date) VALUES (15,13,100330,'2025-03-03 21:29:29','2025-03-03 21:29:29');
+INSERT INTO orders (order_id, user_id, total_amount, created_date, last_modified_date) VALUES (16,13,100060,'2025-03-04 12:16:15','2025-03-04 12:16:15');

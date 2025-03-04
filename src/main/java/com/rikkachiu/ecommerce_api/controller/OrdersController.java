@@ -39,6 +39,7 @@ public class OrdersController {
         return ResponseEntity.status(HttpStatus.CREATED).body(orders);
     }
 
+    // 查詢所有訂單，依不同條件
     @GetMapping("/users/{userId}/orders")
     public ResponseEntity<PageDTO<Orders>> getOrders(
             @PathVariable Integer userId,
