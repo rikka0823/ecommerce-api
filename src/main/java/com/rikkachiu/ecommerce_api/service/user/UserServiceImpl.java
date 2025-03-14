@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,6 +20,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // 依 id 取得用戶資訊
     @Override
@@ -34,30 +39,15 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
-        // 密碼雜湊
-        userDTO.setPassword(DigestUtils.md5DigestAsHex(userDTO.getPassword().getBytes()));
+        // 密碼加密
+        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
         return userDao.createUser(userDTO);
     }
 
     // 登入
     @Override
-    public User login(UserDTO userDTO) {
-        // 依 email 取得用戶資訊
-        User user = userDao.getUserByEmail(userDTO.getEmail());
-
-        // 檢查 email 是否註冊
-        if (user == null) {
-            logger.warn("email: {} 尚未註冊", userDTO.getEmail());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-
-        // 驗證密碼
-        if (!user.getPassword().equals(DigestUtils.md5DigestAsHex(userDTO.getPassword().getBytes()))) {
-            logger.warn("email: {} 登入密碼錯誤", userDTO.getEmail());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-
-        return user;
+    public User userLogin(Authentication authentication) {
+        return userDao.getUserByEmail(authentication.getName());
     }
 }

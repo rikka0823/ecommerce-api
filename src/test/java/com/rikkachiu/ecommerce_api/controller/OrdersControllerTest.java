@@ -211,6 +211,6 @@ public class OrdersControllerTest {
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().is(401));
     }
 }

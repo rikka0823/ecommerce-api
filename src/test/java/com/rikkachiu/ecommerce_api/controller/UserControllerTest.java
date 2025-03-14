@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -126,30 +127,19 @@ public class UserControllerTest {
     }
 
     // 登入，成功狀態
-    @Transactional
     @Test
     public void loginOnSuccess() throws Exception {
-        // 建立 json 內容
-        UserDTO userDTO = new UserDTO();
-        userDTO.setEmail("test@gmail.com");
-        userDTO.setPassword("123");
-        String json = objectMapper.writeValueAsString(userDTO);
-
-        // 註冊
-        register(userDTO);
-
         // 設定請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/users/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json);
+                .with(httpBasic("test3@gmail.com", "333"));
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userId", notNullValue()))
-                .andExpect(jsonPath("$.email", equalTo("test@gmail.com")))
+                .andExpect(jsonPath("$.email", equalTo("test3@gmail.com")))
                 .andExpect(jsonPath("$.createdDate", notNullValue()))
                 .andExpect(jsonPath("$.lastModifiedDate", notNullValue()));
     }
@@ -166,42 +156,29 @@ public class UserControllerTest {
         // 註冊
         register(userDTO);
 
-        // 設定 email 格式錯誤
-        userDTO.setEmail("test");
-        String json = objectMapper.writeValueAsString(userDTO);
-
         // 設定請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/users/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json);
+                .with(httpBasic("testgmail.com", "123"));
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnauthorized());
     }
 
     // 登入，email 不存在狀態
-    @Transactional
     @Test
     public void loginByEmailNotExists() throws Exception {
-        // 建立 json 內容
-        UserDTO userDTO = new UserDTO();
-        userDTO.setEmail("test@gmail.com");
-        userDTO.setPassword("123");
-        String json = objectMapper.writeValueAsString(userDTO);
-
         // 設定請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/users/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json);
+                .with(httpBasic("test@gmail.com", "111"));
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnauthorized());
     }
 
     // 登入，密碼錯誤狀態
@@ -216,19 +193,14 @@ public class UserControllerTest {
         // 註冊
         register(userDTO);
 
-        // 設定密碼錯誤
-        userDTO.setPassword("124");
-        String json = objectMapper.writeValueAsString(userDTO);
-
         // 設定請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/users/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json);
+                .with(httpBasic("test@gmail.com", "12"));
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnauthorized());
     }
 }

@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +35,7 @@ public class UserController {
 
     // 登入
     @PostMapping("/users/login")
-    public ResponseEntity<User> login(@RequestBody @Valid UserDTO userDTO) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.login(userDTO));
+    public ResponseEntity<User> userLogin(Authentication authentication) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.userLogin(authentication));
     }
 }

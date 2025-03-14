@@ -2,6 +2,7 @@ package com.rikkachiu.ecommerce_api.service.user;
 
 import com.rikkachiu.ecommerce_api.model.dto.UserDTO;
 import com.rikkachiu.ecommerce_api.model.pojo.User;
+import org.springframework.security.core.Authentication;
 
 public interface UserService {
 
@@ -12,5 +13,5 @@ public interface UserService {
     Integer register(UserDTO userDTO);
 
     // 登入
-    User login(UserDTO userDTO);
+    User userLogin(Authentication authentication);
 }

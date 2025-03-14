@@ -8,7 +8,7 @@ INSERT INTO product (product_name, category, image_url, price, stock, descriptio
 INSERT INTO product (product_name, category, image_url, price, stock, description, created_date, last_modified_date) VALUES ('Tesla', 'CAR', 'https://cdn.pixabay.com/photo/2021/01/15/16/49/tesla-5919764_1280.jpg', 450000, 5, '世界最暢銷的充電式汽車', '2022-03-21 23:30:00', '2022-03-21 23:30:00');
 
 --user
-INSERT INTO `user` (user_id, email, password, created_date, last_modified_date) VALUES (13,'test5@gmail.com','828c88f34ecb4c1ca8d89e018c6fad1a','2025-02-28 19:14:07','2025-02-28 19:14:07');
+INSERT INTO `user` (user_id, email, password, created_date, last_modified_date) VALUES (13,'test3@gmail.com','$2a$10$YBV0mwoLiZcx4H.O1crhzesqME/WAR12RZ4vsx3SMy2hFDe.JtMuC','2025-02-28 19:14:07','2025-02-28 19:14:07');
 
 --order_item
 INSERT INTO order_item (order_item_id, order_id, product_id, quantity, amount) VALUES (36,14,1,1,30);
