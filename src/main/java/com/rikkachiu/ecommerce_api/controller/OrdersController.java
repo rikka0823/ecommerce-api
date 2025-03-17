@@ -73,4 +73,15 @@ public class OrdersController {
 
         return ResponseEntity.status(HttpStatus.OK).body(pageDTO);
     }
+
+    // 刪除訂單
+    @DeleteMapping("/users/{userId}/orders/{orderId}")
+    public ResponseEntity<?> deleteOrders(
+            @PathVariable Integer userId,
+            @PathVariable Integer orderId,
+            Authentication authentication
+    ) {
+        ordersService.deleteOrders(userId, orderId, authentication);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

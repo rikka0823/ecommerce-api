@@ -249,4 +249,34 @@ public class OrdersControllerTest {
                 .andDo(print())
                 .andExpect(status().is(400));
     }
+
+    // 刪除訂單，204
+    @Transactional
+    @Test
+    public void deleteOrdersOnBadRequest() throws Exception {
+        // 設定請求路徑、參數
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .delete("/users/{userId}/orders/{orderId}", 13, 14)
+                .with(httpBasic("test1@gmail.com", "111"));
+
+        // 驗證返回內容
+        mockMvc.perform(requestBuilder)
+                .andDo(print())
+                .andExpect(status().is(204));
+    }
+
+    // 刪除訂單，204
+    @Transactional
+    @Test
+    public void deleteOrdersOn() throws Exception {
+        // 設定請求路徑、參數
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .delete("/users/{userId}/orders/{orderId}", 13, 14)
+                .with(httpBasic("test2@gmail.com", "222"));
+
+        // 驗證返回內容
+        mockMvc.perform(requestBuilder)
+                .andDo(print())
+                .andExpect(status().is(400));
+    }
 }

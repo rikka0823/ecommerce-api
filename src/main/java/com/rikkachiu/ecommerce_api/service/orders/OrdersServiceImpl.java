@@ -1,5 +1,6 @@
 package com.rikkachiu.ecommerce_api.service.orders;
 
+import com.rikkachiu.ecommerce_api.constant.Role;
 import com.rikkachiu.ecommerce_api.dao.orders.OrdersDao;
 import com.rikkachiu.ecommerce_api.dao.product.ProductDao;
 import com.rikkachiu.ecommerce_api.dao.user.UserDao;
@@ -9,16 +10,20 @@ import com.rikkachiu.ecommerce_api.model.dto.OrdersQueryParamsDTO;
 import com.rikkachiu.ecommerce_api.model.pojo.OrderItem;
 import com.rikkachiu.ecommerce_api.model.pojo.Orders;
 import com.rikkachiu.ecommerce_api.model.pojo.Product;
+import com.rikkachiu.ecommerce_api.model.pojo.User;
+import com.rikkachiu.ecommerce_api.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class OrdersServiceImpl implements OrdersService {
@@ -33,6 +38,9 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private UserService userService;
 
     // 檢查 userId 是否存在
     private void existsById(Integer userId) {
@@ -134,5 +142,29 @@ public class OrdersServiceImpl implements OrdersService {
         }
 
         return ordersList;
+    }
+
+    // 刪除訂單
+    @Override
+    public void deleteOrders(Integer userId, Integer orderId, Authentication authentication) {
+        // 依 email 查詢 user
+        User user = userService.getUserByEmail(authentication.getName());
+        Set<Role> roleSet = user.getRoleSet();
+        List<Integer> orderIds = ordersDao.getOrdersIds(user.getUserId());
+
+        // 限制 ROLE_CUSTOMER 權限
+        if (roleSet.size() == 1 && roleSet.contains(Role.ROLE_CUSTOMER)) {
+            if (user.getUserId() != userId) {
+                logger.warn("id: {} 未被授權刪除該訂單", user.getUserId());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+
+            if (!orderIds.contains(orderId)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        // 依 orderId 刪除訂單
+        ordersDao.deleteOrders(orderId);
     }
 }

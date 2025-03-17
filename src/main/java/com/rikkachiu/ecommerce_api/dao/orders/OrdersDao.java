@@ -25,4 +25,10 @@ public interface OrdersDao {
 
     // 查詢所有訂單，依不同條件
     List<Orders> getOrders(Integer userId, OrdersQueryParamsDTO ordersQueryParamsDTO);
+
+    // 取得所有訂單號碼
+    List<Integer> getOrdersIds(Integer userId);
+
+    // 刪除訂單
+    void deleteOrders(Integer orderId);
 }

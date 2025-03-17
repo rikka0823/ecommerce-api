@@ -144,4 +144,30 @@ public class OrdersDaoImpl implements OrdersDao {
 
         return namedParameterJdbcTemplate.query(sql.toString(), params, new OrdersRowMapper());
     }
+
+    @Override
+    public List<Integer> getOrdersIds(Integer userId) {
+        // sql 語法與欄位映射
+        String sql = """
+                SELECT order_id FROM orders WHERE user_id = :userId
+                """;
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("userId", userId);
+
+        return namedParameterJdbcTemplate.query(sql, params,
+                (rs, rowNum) -> rs.getInt("order_id"));
+    }
+
+    // 刪除訂單
+    @Override
+    public void deleteOrders(Integer orderId) {
+        // sql 語法與欄位映射
+        String sql = """
+                DELETE FROM orders WHERE order_id = :orderId
+                """;
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("orderId", orderId);
+
+        namedParameterJdbcTemplate.update(sql, params);
+    }
 }

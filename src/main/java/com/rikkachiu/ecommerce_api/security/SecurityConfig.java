@@ -46,7 +46,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/users/{userId}/orders").hasAnyRole("ADMIN", "SELLER", "CUSTOMER")
                         .requestMatchers(HttpMethod.PUT, "/products/{productId}").hasAnyRole("ADMIN", "SELLER")
                         .requestMatchers(HttpMethod.DELETE, "/products/{productId}").hasAnyRole("ADMIN", "SELLER")
-                        .requestMatchers(HttpMethod.DELETE, "/users/{userId}/delete").hasAnyRole("ADMIN", "SELLER", "CUSTOMER")
+                        .requestMatchers(HttpMethod.DELETE, "/users/{userId}/delete", "/users/{userId}/orders/{orderId}").hasAnyRole("ADMIN", "SELLER", "CUSTOMER")
 
                         // 管理者權限
                         .requestMatchers(HttpMethod.GET, "/users/search").hasRole("ADMIN")
