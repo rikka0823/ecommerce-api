@@ -8,9 +8,9 @@ INSERT INTO product (product_name, category, image_url, price, stock, descriptio
 INSERT INTO product (product_name, category, image_url, price, stock, description, created_date, last_modified_date) VALUES ('Tesla', 'CAR', 'https://cdn.pixabay.com/photo/2021/01/15/16/49/tesla-5919764_1280.jpg', 450000, 5, '世界最暢銷的充電式汽車', '2022-03-21 23:30:00', '2022-03-21 23:30:00');
 
 --user
-INSERT INTO `user` (`user_id`,`email`,`password`,`created_date`,`last_modified_date`) VALUES (12,'test1@gmail.com','$2a$10$aUfRIOYPn/C2pwjLnz3iMuFgJW.5QSp2aoaj1cL1qMP/dYMsF0Woe','2025-02-28 14:26:27','2025-02-28 14:26:27');
-INSERT INTO `user` (`user_id`,`email`,`password`,`created_date`,`last_modified_date`) VALUES (13,'test3@gmail.com','$2a$10$YBV0mwoLiZcx4H.O1crhzesqME/WAR12RZ4vsx3SMy2hFDe.JtMuC','2025-02-28 19:14:07','2025-02-28 19:14:07');
-INSERT INTO `user` (`user_id`,`email`,`password`,`created_date`,`last_modified_date`) VALUES (14,'test2@gmail.com','$2a$10$cSADPsDTfXcYDjWzzusBHuiI33JYHmI3aFCfP7IF3AkhneRfDlzZS','2025-03-04 23:12:37','2025-03-04 23:12:37');
+INSERT INTO `user` (user_id, email, password, created_date, last_modified_date) VALUES (12,'test1@gmail.com','$2a$10$aUfRIOYPn/C2pwjLnz3iMuFgJW.5QSp2aoaj1cL1qMP/dYMsF0Woe','2025-02-28 14:26:27','2025-02-28 14:26:27');
+INSERT INTO `user` (user_id, email, password, created_date, last_modified_date) VALUES (13,'test3@gmail.com','$2a$10$YBV0mwoLiZcx4H.O1crhzesqME/WAR12RZ4vsx3SMy2hFDe.JtMuC','2025-02-28 19:14:07','2025-02-28 19:14:07');
+INSERT INTO `user` (user_id, email, password, created_date, last_modified_date) VALUES (14,'test2@gmail.com','$2a$10$cSADPsDTfXcYDjWzzusBHuiI33JYHmI3aFCfP7IF3AkhneRfDlzZS','2025-03-04 23:12:37','2025-03-04 23:12:37');
 
 --order_item
 INSERT INTO order_item (order_item_id, order_id, product_id, quantity, amount) VALUES (36,14,1,1,30);
@@ -34,7 +34,7 @@ INSERT INTO role (role_id, role_name) VALUES (2,'ROLE_SELLER');
 INSERT INTO role (role_id, role_name) VALUES (3,'ROLE_CUSTOMER');
 
 --user_has_role
-INSERT INTO user_has_role (user_has_role_id, user_id, role_id) VALUES (1,12,1);
-INSERT INTO user_has_role (user_has_role_id, user_id, role_id) VALUES (2,13,2);
-INSERT INTO user_has_role (user_has_role_id, user_id, role_id) VALUES (3,13,3);
-INSERT INTO user_has_role (user_has_role_id, user_id, role_id) VALUES (4,14,3);
+INSERT INTO user_has_role (user_has_role_id, user_id, role_id) VALUES (2,12,1);
+INSERT INTO user_has_role (user_has_role_id, user_id, role_id) VALUES (3,13,2);
+INSERT INTO user_has_role (user_has_role_id, user_id, role_id) VALUES (4,13,3);
+INSERT INTO user_has_role (user_has_role_id, user_id, role_id) VALUES (5,14,3);

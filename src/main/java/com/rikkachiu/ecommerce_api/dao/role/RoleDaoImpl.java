@@ -64,10 +64,12 @@ public class RoleDaoImpl implements RoleDao {
     public void deleteRolesById(String email) {
         // sql 語法與欄位映射
         String sql = """
-                DELETE uhr
-                FROM user_has_role AS uhr
-                JOIN `user` AS u ON u.user_id = uhr.user_id
-                WHERE u.email = :email
+                DELETE FROM user_has_role
+                WHERE user_id IN (
+                    SELECT user_id
+                    FROM `user`
+                    WHERE email = :email
+                )
                 """;
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("email", email);
