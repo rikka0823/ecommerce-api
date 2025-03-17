@@ -74,4 +74,17 @@ public class UserDaoImpl implements UserDao {
 
         return id;
     }
+
+    // 刪除帳號
+    @Override
+    public void deleteUser(Integer userId) {
+        // sql 語法與欄位映射
+        String sql = """
+                DELETE FROM `user` WHERE user_id = :userId
+                """;
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("userId", userId);
+
+        namedParameterJdbcTemplate.update(sql, params);
+    }
 }

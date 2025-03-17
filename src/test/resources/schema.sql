@@ -36,3 +36,16 @@ CREATE TABLE IF NOT EXISTS order_item
     quantity      INT NOT NULL, -- 商品數量
     amount        INT NOT NULL  -- 商品花費
 );
+
+CREATE TABLE IF NOT EXISTS role (
+  role_id int NOT NULL AUTO_INCREMENT,
+  role_name varchar(256) NOT NULL,
+  PRIMARY KEY (role_id)
+);
+
+CREATE TABLE IF NOT EXISTS user_has_role (
+  user_has_role_id int NOT NULL AUTO_INCREMENT,
+  user_id int NOT NULL,
+  role_id int NOT NULL,
+  PRIMARY KEY (user_has_role_id)
+);

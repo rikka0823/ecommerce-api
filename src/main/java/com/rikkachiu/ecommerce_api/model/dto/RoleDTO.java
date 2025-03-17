@@ -9,14 +9,11 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-public class UserDTO {
+public class RoleDTO {
 
-    @NotBlank
     @Email
-    private String email;
-
     @NotBlank
-    private String password;
+    private String email;
 
     @NotEmpty
     private Set<Role> roleSet;

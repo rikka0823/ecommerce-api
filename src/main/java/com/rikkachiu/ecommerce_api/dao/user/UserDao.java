@@ -13,4 +13,7 @@ public interface UserDao {
 
     // 建立帳號
     Integer createUser(UserDTO userDTO);
+
+    // 刪除帳號
+    void deleteUser(Integer userId);
 }

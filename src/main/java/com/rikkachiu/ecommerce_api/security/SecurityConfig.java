@@ -11,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @Configuration
 public class SecurityConfig {
 
@@ -40,11 +40,17 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/users/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/products", "/products/{productId}").permitAll()
 
-                        // 登入檢驗，限制訂單、商品增刪查改權限
-                        .requestMatchers(HttpMethod.POST, "/products", "/users/{userId}/orders", "/users/login").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/users/{userId}/orders").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/products/{productId}").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/products/{productId}").authenticated()
+                        // 會員、訂單、商品增刪查改權限
+                        .requestMatchers(HttpMethod.POST,  "/users/{userId}/orders", "/users/login").hasAnyRole("ADMIN", "SELLER", "CUSTOMER")
+                        .requestMatchers(HttpMethod.POST, "/products").hasAnyRole("ADMIN", "SELLER")
+                        .requestMatchers(HttpMethod.GET, "/users/{userId}/orders").hasAnyRole("ADMIN", "SELLER", "CUSTOMER")
+                        .requestMatchers(HttpMethod.PUT, "/products/{productId}").hasAnyRole("ADMIN", "SELLER")
+                        .requestMatchers(HttpMethod.DELETE, "/products/{productId}").hasAnyRole("ADMIN", "SELLER")
+                        .requestMatchers(HttpMethod.DELETE, "/users/{userId}/delete").hasAnyRole("ADMIN", "SELLER", "CUSTOMER")
+
+                        // 管理者權限
+                        .requestMatchers(HttpMethod.GET, "/users/search").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/users/update").hasRole("ADMIN")
 
                         // 例外限制
                         .anyRequest().denyAll()

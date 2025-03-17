@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -162,6 +163,7 @@ public class ProductControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/products")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(httpBasic("test3@gmail.com", "333"))
                 .content(json);
 
         // 驗證返回內容
@@ -196,12 +198,39 @@ public class ProductControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/products")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(httpBasic("test3@gmail.com", "333"))
                 .content(json);
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().is(400));
+    }
+
+    // 新增商品，403
+    @Transactional
+    @Test
+    public void createProductOnForbidden() throws Exception {
+        // 建立 json 內容
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setProductName("apple_book");
+        productDTO.setCategory(ProductCategory.E_BOOK);
+        productDTO.setStock(1);
+        productDTO.setPrice(10);
+        productDTO.setImageUrl("http://book.com");
+        String json = objectMapper.writeValueAsString(productDTO);
+
+        // 設定請求路徑、參數
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/products")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(httpBasic("test2@gmail.com", "222"))
+                .content(json);
+
+        // 驗證返回內容
+        mockMvc.perform(requestBuilder)
+                .andDo(print())
+                .andExpect(status().is(403));
     }
 
     // 依 id 更新商品，200
@@ -221,6 +250,7 @@ public class ProductControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .put("/products/{productId}", 1)
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(httpBasic("test3@gmail.com", "333"))
                 .content(json);
 
         // 驗證返回內容
@@ -246,6 +276,7 @@ public class ProductControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .put("/products/{productId}", 9)
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(httpBasic("test3@gmail.com", "333"))
                 .content(json);
 
         // 驗證返回內容
@@ -254,17 +285,59 @@ public class ProductControllerTest {
                 .andExpect(status().is(404));
     }
 
+    // 依 id 更新商品，403
+    @Transactional
+    @Test
+    public void updateProductOnForbidden() throws Exception {
+        // 建立 json 內容
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setProductName("apple_book");
+        productDTO.setCategory(ProductCategory.E_BOOK);
+        productDTO.setStock(2);
+        productDTO.setPrice(10);
+        productDTO.setImageUrl("http://book.com");
+        String json = objectMapper.writeValueAsString(productDTO);
+
+        // 設定請求路徑、參數
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .put("/products/{productId}", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(httpBasic("test2@gmail.com", "222"))
+                .content(json);
+
+        // 驗證返回內容
+        mockMvc.perform(requestBuilder)
+                .andDo(print())
+                .andExpect(status().is(403));
+    }
+
     // 依 id 刪除商品，204
     @Transactional
     @Test
     public void deleteProductById() throws Exception {
         // 設請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .delete("/products/{productId}", 100);
+                .delete("/products/{productId}", 100)
+                .with(httpBasic("test1@gmail.com", "111"));
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().isNoContent());
+    }
+
+    // 依 id 刪除商品，204
+    @Transactional
+    @Test
+    public void deleteProductByIdOnForbidden() throws Exception {
+        // 設請求路徑、參數
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .delete("/products/{productId}", 100)
+                .with(httpBasic("test2@gmail.com", "222"));
+
+        // 驗證返回內容
+        mockMvc.perform(requestBuilder)
+                .andDo(print())
+                .andExpect(status().is(403));
     }
 }
