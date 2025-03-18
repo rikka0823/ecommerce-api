@@ -34,7 +34,7 @@ INSERT INTO role (role_id, role_name) VALUES (2,'ROLE_SELLER');
 INSERT INTO role (role_id, role_name) VALUES (3,'ROLE_CUSTOMER');
 
 --user_has_role
-INSERT INTO user_has_role (user_has_role_id, user_id, role_id) VALUES (2,12,1);
-INSERT INTO user_has_role (user_has_role_id, user_id, role_id) VALUES (3,13,2);
-INSERT INTO user_has_role (user_has_role_id, user_id, role_id) VALUES (4,13,3);
-INSERT INTO user_has_role (user_has_role_id, user_id, role_id) VALUES (5,14,3);
+INSERT INTO user_has_role (user_has_role_id, user_id, role_id) VALUES (8,12,1);
+INSERT INTO user_has_role (user_has_role_id, user_id, role_id) VALUES (9,13,2);
+INSERT INTO user_has_role (user_has_role_id, user_id, role_id) VALUES (10,13,3);
+INSERT INTO user_has_role (user_has_role_id, user_id, role_id) VALUES (11,14,3);

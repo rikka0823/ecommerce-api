@@ -21,6 +21,7 @@ import java.util.Set;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -241,6 +242,7 @@ public class UserControllerTest {
                 .put("/users/update")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
+                .with(csrf())
                 .with(httpBasic("test1@gmail.com", "111"));
 
         // 驗證返回內容
@@ -271,6 +273,7 @@ public class UserControllerTest {
                 .put("/users/update")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
+                .with(csrf())
                 .with(httpBasic("test2@gmail.com", "222"));
 
         // 驗證返回內容
@@ -316,6 +319,7 @@ public class UserControllerTest {
         // 設定請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/users/{userId}/delete", 1)
+                .with(csrf())
                 .with(httpBasic("test1@gmail.com", "111"));
 
         // 驗證返回內容
@@ -331,6 +335,7 @@ public class UserControllerTest {
         // 設定請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/users/{userId}/delete", 1)
+                .with(csrf())
                 .with(httpBasic("test2@gmail.com", "222"));
 
         // 驗證返回內容

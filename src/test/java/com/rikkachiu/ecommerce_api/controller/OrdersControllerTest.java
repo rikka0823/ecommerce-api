@@ -18,6 +18,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -51,6 +52,7 @@ public class OrdersControllerTest {
                 .post("/users/{userId}/orders", 13)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(httpBasic("test3@gmail.com", "333"))
+                .with(csrf())
                 .content(json);
 
         // 驗證返回內容
@@ -84,6 +86,7 @@ public class OrdersControllerTest {
                 .post("/users/{userId}/orders", 130)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(httpBasic("test3@gmail.com", "333"))
+                .with(csrf())
                 .content(json);
 
         // 驗證返回內容
@@ -111,6 +114,7 @@ public class OrdersControllerTest {
                 .post("/users/{userId}/orders", 13)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(httpBasic("test3@gmail.com", "333"))
+                .with(csrf())
                 .content(json);
 
         // 驗證返回內容
@@ -138,6 +142,7 @@ public class OrdersControllerTest {
                 .post("/users/{userId}/orders", 13)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(httpBasic("test3@gmail.com", "333"))
+                .with(csrf())
                 .content(json);
 
         // 驗證返回內容
@@ -161,6 +166,7 @@ public class OrdersControllerTest {
                 .post("/users/{userId}/orders", 13)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(httpBasic("test3@gmail.com", "333"))
+                .with(csrf())
                 .content(json);
 
         // 驗證返回內容
@@ -188,6 +194,7 @@ public class OrdersControllerTest {
                 .post("/users/{userId}/orders", 13)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(httpBasic("test2@gmail.com", "222"))
+                .with(csrf())
                 .content(json);
 
         // 驗證返回內容
@@ -257,6 +264,7 @@ public class OrdersControllerTest {
         // 設定請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/users/{userId}/orders/{orderId}", 13, 14)
+                .with(csrf())
                 .with(httpBasic("test1@gmail.com", "111"));
 
         // 驗證返回內容
@@ -268,10 +276,11 @@ public class OrdersControllerTest {
     // 刪除訂單，204
     @Transactional
     @Test
-    public void deleteOrdersOn() throws Exception {
+    public void deleteOrdersOnSuccess() throws Exception {
         // 設定請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/users/{userId}/orders/{orderId}", 13, 14)
+                .with(csrf())
                 .with(httpBasic("test2@gmail.com", "222"));
 
         // 驗證返回內容

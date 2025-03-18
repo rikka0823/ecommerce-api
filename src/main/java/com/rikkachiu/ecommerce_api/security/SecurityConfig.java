@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -42,18 +44,30 @@ public class SecurityConfig {
         return source;
     }
 
+    private CsrfTokenRequestAttributeHandler csrfTokenRequestAttributeHandler() {
+        // 設定 CSRF token 名稱
+        CsrfTokenRequestAttributeHandler csrfTokenRequestAttributeHandler = new CsrfTokenRequestAttributeHandler();
+        csrfTokenRequestAttributeHandler.setCsrfRequestAttributeName(null);
+        return csrfTokenRequestAttributeHandler;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 // session 設定
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                )
 
                 // CORS 設定
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 // CSRF 設定
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .csrfTokenRequestHandler(csrfTokenRequestAttributeHandler())
+                        .ignoringRequestMatchers("/users/register", "/users/login")
+                )
 
                 // form 表單、httpBasic 登入設定
                 .formLogin(Customizer.withDefaults())
@@ -83,7 +97,6 @@ public class SecurityConfig {
                         // 例外限制
                         .anyRequest().denyAll()
                 )
-
 
                 .build();
     }

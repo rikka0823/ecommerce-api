@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -164,6 +165,7 @@ public class ProductControllerTest {
                 .post("/products")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(httpBasic("test3@gmail.com", "333"))
+                .with(csrf())
                 .content(json);
 
         // 驗證返回內容
@@ -199,6 +201,7 @@ public class ProductControllerTest {
                 .post("/products")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(httpBasic("test3@gmail.com", "333"))
+                .with(csrf())
                 .content(json);
 
         // 驗證返回內容
@@ -225,6 +228,7 @@ public class ProductControllerTest {
                 .post("/products")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(httpBasic("test2@gmail.com", "222"))
+                .with(csrf())
                 .content(json);
 
         // 驗證返回內容
@@ -251,6 +255,7 @@ public class ProductControllerTest {
                 .put("/products/{productId}", 1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(httpBasic("test3@gmail.com", "333"))
+                .with(csrf())
                 .content(json);
 
         // 驗證返回內容
@@ -277,6 +282,7 @@ public class ProductControllerTest {
                 .put("/products/{productId}", 9)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(httpBasic("test3@gmail.com", "333"))
+                .with(csrf())
                 .content(json);
 
         // 驗證返回內容
@@ -303,6 +309,7 @@ public class ProductControllerTest {
                 .put("/products/{productId}", 1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(httpBasic("test2@gmail.com", "222"))
+                .with(csrf())
                 .content(json);
 
         // 驗證返回內容
@@ -318,6 +325,7 @@ public class ProductControllerTest {
         // 設請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/products/{productId}", 100)
+                .with(csrf())
                 .with(httpBasic("test1@gmail.com", "111"));
 
         // 驗證返回內容
@@ -333,6 +341,7 @@ public class ProductControllerTest {
         // 設請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/products/{productId}", 100)
+                .with(csrf())
                 .with(httpBasic("test2@gmail.com", "222"));
 
         // 驗證返回內容
