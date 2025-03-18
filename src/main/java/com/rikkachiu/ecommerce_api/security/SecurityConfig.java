@@ -10,6 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
@@ -34,6 +35,9 @@ public class SecurityConfig {
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
 
+                // 登入紀錄過濾
+                .addFilterAfter(new SecurityFilter(), BasicAuthenticationFilter.class)
+
                 // 請求路徑設定
                 .authorizeHttpRequests(request -> request
                         // 允許所有人註冊、登入、查詢商品
@@ -55,6 +59,7 @@ public class SecurityConfig {
                         // 例外限制
                         .anyRequest().denyAll()
                 )
+
 
                 .build();
     }

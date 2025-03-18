@@ -1,6 +1,5 @@
 package com.rikkachiu.ecommerce_api.controller;
 
-import com.rikkachiu.ecommerce_api.dao.product.ProductDao;
 import com.rikkachiu.ecommerce_api.model.dto.OrdersDTO;
 import com.rikkachiu.ecommerce_api.model.dto.OrdersQueryParamsDTO;
 import com.rikkachiu.ecommerce_api.model.dto.PageDTO;
