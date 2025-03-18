@@ -11,6 +11,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @EnableWebSecurity
 @Configuration
@@ -21,12 +26,31 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    private CorsConfigurationSource corsConfigurationSource() {
+        // 設定 cors
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:8080"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedMethods(List.of("POST", "GET", "UPDATE", "DELETE"));
+        config.setAllowCredentials(true);
+        config.setMaxAge(3600L);
+
+        // 設置允許路徑
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return source;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 // session 設定
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+
+                // CORS 設定
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 // CSRF 設定
                 .csrf(csrf -> csrf.disable())
