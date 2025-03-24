@@ -1,5 +1,6 @@
 package com.rikkachiu.ecommerce_api.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -28,6 +29,12 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Autowired
+    private OAuth2OidcService oAuth2OidcService;
+
+    @Autowired
+    private OAuth2Service oAuth2Service;
+
     private CorsConfigurationSource corsConfigurationSource() {
         // 設定 cors
         CorsConfiguration config = new CorsConfiguration();
@@ -54,6 +61,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+
                 // session 設定
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
@@ -72,6 +80,14 @@ public class SecurityConfig {
                 // form 表單、httpBasic 登入設定
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
+
+                // OAuth2.0 設定
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(infoEndpoint -> infoEndpoint
+                                .oidcUserService(oAuth2OidcService)
+                                .userService(oAuth2Service)
+                        )
+                )
 
                 // 登入紀錄過濾
                 .addFilterAfter(new SecurityFilter(), BasicAuthenticationFilter.class)

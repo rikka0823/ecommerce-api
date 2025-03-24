@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -60,7 +61,12 @@ public class UserServiceImpl implements UserService {
         }
 
         // 依 email 查詢 user
-        User user = userDao.getUserByEmail(authentication.getName());
+        User user;
+        if (authentication.getPrincipal() instanceof OidcUser oidcUser) {
+            user = userDao.getUserByEmail(oidcUser.getEmail());
+        } else {
+            user = userDao.getUserByEmail(authentication.getName());
+        }
 
         // 限制 ROLE_CUSTOMER 權限
         if (roleSet.size() == 1 && roleSet.contains(Role.ROLE_CUSTOMER)) {

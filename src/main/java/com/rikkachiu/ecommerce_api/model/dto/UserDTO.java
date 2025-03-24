@@ -20,4 +20,8 @@ public class UserDTO {
 
     @NotEmpty
     private Set<Role> roleSet;
+
+    private String providerUserId;
+
+    private String provider;
 }

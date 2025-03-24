@@ -12,12 +12,15 @@ CREATE TABLE IF NOT EXISTS product
 );
 
 CREATE TABLE IF NOT EXISTS `user` (
-    user_id int AUTO_INCREMENT PRIMARY KEY,
-    email varchar(256) NOT NULL UNIQUE,
-    password varchar(256) NOT NULL UNIQUE,
-    created_date TIMESTAMP NOT NULL,
-    last_modified_date TIMESTAMP NOT NULL
+  user_id int PRIMARY KEY AUTO_INCREMENT,
+  email varchar(256) NOT NULL UNIQUE,
+  password varchar(256) DEFAULT NULL,
+  created_date timestamp NOT NULL,
+  last_modified_date timestamp NOT NULL,
+  provider_user_id varchar(256) DEFAULT NULL UNIQUE,
+  provider varchar(64) DEFAULT NULL
 );
+
 
 CREATE TABLE IF NOT EXISTS orders
 (

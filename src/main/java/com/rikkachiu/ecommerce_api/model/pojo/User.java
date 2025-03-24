@@ -21,4 +21,6 @@ public class User {
     private Date createdDate;
     private Date lastModifiedDate;
     private Set<Role> roleSet;
+    private String providerUserId;
+    private String provider;
 }

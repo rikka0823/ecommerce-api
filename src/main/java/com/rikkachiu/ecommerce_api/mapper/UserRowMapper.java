@@ -17,6 +17,8 @@ public class UserRowMapper implements RowMapper<User> {
                 .password(rs.getString("password"))
                 .createdDate(rs.getTimestamp("created_date"))
                 .lastModifiedDate(rs.getTimestamp("last_modified_date"))
+                .providerUserId(rs.getString("provider_user_id"))
+                .provider(rs.getString("provider"))
                 .build();
 
         return user;
