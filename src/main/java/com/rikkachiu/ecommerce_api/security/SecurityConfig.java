@@ -99,7 +99,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/products", "/products/{productId}").permitAll()
 
                         // 會員、訂單、商品增刪查改權限
-                        .requestMatchers(HttpMethod.POST,  "/users/{userId}/orders", "/users/login").hasAnyRole("ADMIN", "SELLER", "CUSTOMER")
+                        .requestMatchers(HttpMethod.POST, "/users/{userId}/orders", "/users/login").hasAnyRole("ADMIN", "SELLER", "CUSTOMER")
                         .requestMatchers(HttpMethod.POST, "/products").hasAnyRole("ADMIN", "SELLER")
                         .requestMatchers(HttpMethod.GET, "/users/{userId}/orders").hasAnyRole("ADMIN", "SELLER", "CUSTOMER")
                         .requestMatchers(HttpMethod.PUT, "/products/{productId}").hasAnyRole("ADMIN", "SELLER")

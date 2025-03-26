@@ -21,7 +21,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   provider varchar(64) DEFAULT NULL
 );
 
-
 CREATE TABLE IF NOT EXISTS orders
 (
     order_id           INT       PRIMARY KEY AUTO_INCREMENT,
