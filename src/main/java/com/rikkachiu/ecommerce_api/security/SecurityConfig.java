@@ -4,21 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @EnableWebSecurity
 @Configuration
@@ -35,51 +35,15 @@ public class SecurityConfig {
     @Autowired
     private OAuth2Service oAuth2Service;
 
-    private CorsConfigurationSource corsConfigurationSource() {
-        // 設定 cors
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:8080"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowedMethods(List.of("POST", "GET", "UPDATE", "DELETE"));
-        config.setAllowCredentials(true);
-        config.setMaxAge(3600L);
-
-        // 設置允許路徑
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-
-        return source;
-    }
-
-    private CsrfTokenRequestAttributeHandler csrfTokenRequestAttributeHandler() {
-        // 設定 CSRF token 名稱
-        CsrfTokenRequestAttributeHandler csrfTokenRequestAttributeHandler = new CsrfTokenRequestAttributeHandler();
-        csrfTokenRequestAttributeHandler.setCsrfRequestAttributeName(null);
-        return csrfTokenRequestAttributeHandler;
-    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-
-                // session 設定
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                )
 
                 // CORS 設定
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 // CSRF 設定
-                .csrf(csrf -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .csrfTokenRequestHandler(csrfTokenRequestAttributeHandler())
-                        .ignoringRequestMatchers("/users/register", "/users/login")
-                )
-
-                // form 表單、httpBasic 登入設定
-                .formLogin(Customizer.withDefaults())
-                .httpBasic(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
 
                 // OAuth2.0 設定
                 .oauth2Login(oauth2 -> oauth2
@@ -89,14 +53,18 @@ public class SecurityConfig {
                         )
                 )
 
-                // 登入紀錄過濾
-                .addFilterAfter(new SecurityFilter(), BasicAuthenticationFilter.class)
+                // JWT 設定
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwtConfigurer -> jwtConfigurer
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                        )
+                )
 
                 // 請求路徑設定
                 .authorizeHttpRequests(request -> request
-                        // 允許所有人註冊、登入、查詢商品
-                        .requestMatchers(HttpMethod.POST, "/users/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/products", "/products/{productId}").permitAll()
+                        // 允許所有人註冊、登入、查詢商品、獲取 token
+                        .requestMatchers(HttpMethod.POST, "/users/register", "/keycloak/getToken", "/keycloak/exchangeAccessToken").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/products", "/products/{productId}", "/keycloak/buildAuthUrl").permitAll()
 
                         // 會員、訂單、商品增刪查改權限
                         .requestMatchers(HttpMethod.POST, "/users/{userId}/orders", "/users/login").hasAnyRole("ADMIN", "SELLER", "CUSTOMER")
@@ -115,5 +83,45 @@ public class SecurityConfig {
                 )
 
                 .build();
+    }
+
+    // CORS 設定
+    private CorsConfigurationSource corsConfigurationSource() {
+        // 設定 cors
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:8080"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedMethods(List.of("POST", "GET", "UPDATE", "DELETE"));
+        config.setAllowCredentials(true);
+        config.setMaxAge(3600L);
+
+        // 設置允許路徑
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return source;
+    }
+
+    // JWT 認證轉換
+    private JwtAuthenticationConverter jwtAuthenticationConverter() {
+        // 封裝 JWT 轉換方法
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+
+        // 將 JWT 內 roles 取出
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwt -> {
+            List<GrantedAuthority> authorities = new ArrayList<>();
+            Map<String, Object> realmAccess = (Map<String, Object>) jwt.getClaims().get("realm_access");
+            if (realmAccess != null) {
+                List<String> roles = (List<String>) realmAccess.get("roles");
+                if (roles != null) {
+                    for (String role : roles) {
+                        authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+                    }
+                }
+            }
+            return authorities;
+        });
+
+        return jwtAuthenticationConverter;
     }
 }

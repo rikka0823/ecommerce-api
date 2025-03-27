@@ -19,6 +19,7 @@ public class UserRowMapper implements RowMapper<User> {
                 .lastModifiedDate(rs.getTimestamp("last_modified_date"))
                 .providerUserId(rs.getString("provider_user_id"))
                 .provider(rs.getString("provider"))
+                .refreshToken(rs.getString("refresh_token"))
                 .build();
 
         return user;

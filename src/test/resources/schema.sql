@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   created_date timestamp NOT NULL,
   last_modified_date timestamp NOT NULL,
   provider_user_id varchar(256) DEFAULT NULL UNIQUE,
-  provider varchar(64) DEFAULT NULL
+  provider varchar(64) DEFAULT NULL,
+  refresh_token varchar(1024) DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS orders

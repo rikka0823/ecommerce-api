@@ -23,7 +23,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getUserById(Integer userId) {
         // sql 語法與欄位映射
-        String sql = "SELECT user_id, email, password, created_date, last_modified_date, provider_user_id, provider FROM `user` WHERE user_id = :userId";
+        String sql = "SELECT user_id, email, password, created_date, last_modified_date, provider_user_id, provider, refresh_token FROM `user` WHERE user_id = :userId";
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("userId", userId);
 
@@ -41,7 +41,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getUserByEmail(String email) {
         // sql 語法與欄位映射
-        String sql = "SELECT user_id, email, password, created_date, last_modified_date, provider_user_id, provider FROM `user` WHERE email = :email";
+        String sql = "SELECT user_id, email, password, created_date, last_modified_date, provider_user_id, provider, refresh_token FROM `user` WHERE email = :email";
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("email", email);
 
@@ -59,7 +59,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Integer createUser(UserDTO userDTO) {
         // sql 語法與欄位映射
-        String sql = "INSERT INTO `user` (email, password, created_date, last_modified_date, provider_user_id, provider) " +
+        String sql = "INSERT INTO `user` (email, password, created_date, last_modified_date, provider_user_id, provider, refresh_token) " +
                 "VALUES (:email, :password, :createdDate, :lastModifiedDate, :providerUserId, :provider);";
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("email", userDTO.getEmail())
@@ -86,6 +86,18 @@ public class UserDaoImpl implements UserDao {
                 """;
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("userId", userId);
+
+        namedParameterJdbcTemplate.update(sql, params);
+    }
+
+    // 依 email 更新 refresh_token
+    @Override
+    public void updateRefreshTokenByEmail(String email, String refreshToken) {
+        // sql 語法與欄位映射
+        String sql = "UPDATE `user` SET refresh_token = :refreshToken WHERE email = :email";
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("refreshToken", refreshToken)
+                .addValue("email", email);
 
         namedParameterJdbcTemplate.update(sql, params);
     }

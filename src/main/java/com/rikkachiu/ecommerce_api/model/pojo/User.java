@@ -23,4 +23,5 @@ public class User {
     private Set<Role> roleSet;
     private String providerUserId;
     private String provider;
+    private String refreshToken;
 }

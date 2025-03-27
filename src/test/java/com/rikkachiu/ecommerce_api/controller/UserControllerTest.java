@@ -7,6 +7,7 @@ import com.rikkachiu.ecommerce_api.model.dto.RoleDTO;
 import com.rikkachiu.ecommerce_api.model.dto.UserDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -21,8 +22,6 @@ import java.util.Set;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,6 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest
 public class UserControllerTest {
+
+    @Value("${test.access.token}")
+    private String TEST_ACCESS_TOKEN;
 
     @Autowired
     private UserDao userDao;
@@ -94,130 +96,31 @@ public class UserControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    // 註冊帳號，email 格式錯誤狀態
-    @Transactional
-    @Test
-    public void registerByEmailAlreadyExist() throws Exception {
-        // 建立 json 內容
-        UserDTO userDTO = new UserDTO();
-        userDTO.setEmail("test@gmail.com");
-        userDTO.setPassword("123");
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(Role.ROLE_ADMIN);
-        userDTO.setRoleSet(roleSet);
-        String json = objectMapper.writeValueAsString(userDTO);
-
-        // 設定請求路徑、參數
-        RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/users/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json);
-
-        // 驗證第一次註冊
-        mockMvc.perform(requestBuilder)
-                .andDo(print())
-                .andExpect(status().isCreated());
-
-        // 驗證返回內容
-        mockMvc.perform(requestBuilder)
-                .andDo(print())
-                .andExpect(status().isBadRequest());
-    }
-
-    // 註冊
-    private void register(UserDTO userDTO) throws Exception {
-        // 建立 json 內容
-        String json = objectMapper.writeValueAsString(userDTO);
-
-        // 設定請求路徑、參數
-        RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/users/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json);
-
-        // 驗證返回內容
-        mockMvc.perform(requestBuilder)
-                .andDo(print())
-                .andExpect(status().is(201));
-    }
-
     // 登入，成功狀態
     @Test
     public void loginOnSuccess() throws Exception {
         // 設定請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/users/login")
-                .with(httpBasic("test3@gmail.com", "333"));
+                .header("Authorization", "Bearer " + TEST_ACCESS_TOKEN);
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userId", notNullValue()))
-                .andExpect(jsonPath("$.email", equalTo("test3@gmail.com")))
+                .andExpect(jsonPath("$.email", equalTo("test1@gmail.com")))
                 .andExpect(jsonPath("$.createdDate", notNullValue()))
                 .andExpect(jsonPath("$.lastModifiedDate", notNullValue()));
     }
 
-    // 登入，email 格式錯誤狀態
-    @Transactional
+    // 登入，email，401
     @Test
-    public void loginByInvalidEmailFormat() throws Exception {
-        // 建立 json 內容
-        UserDTO userDTO = new UserDTO();
-        userDTO.setEmail("test@gmail.com");
-        userDTO.setPassword("123");
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(Role.ROLE_ADMIN);
-        userDTO.setRoleSet(roleSet);
-
-        // 註冊
-        register(userDTO);
-
+    public void loginOnFail() throws Exception {
         // 設定請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/users/login")
-                .with(httpBasic("testgmail.com", "123"));
-
-        // 驗證返回內容
-        mockMvc.perform(requestBuilder)
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
-    }
-
-    // 登入，email 不存在狀態
-    @Test
-    public void loginByEmailNotExists() throws Exception {
-        // 設定請求路徑、參數
-        RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/users/login")
-                .with(httpBasic("test@gmail.com", "111"));
-
-        // 驗證返回內容
-        mockMvc.perform(requestBuilder)
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
-    }
-
-    // 登入，密碼錯誤狀態
-    @Transactional
-    @Test
-    public void loginByWrongPassword() throws Exception {
-        // 建立 json 內容
-        UserDTO userDTO = new UserDTO();
-        userDTO.setEmail("test@gmail.com");
-        userDTO.setPassword("123");
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(Role.ROLE_ADMIN);
-        userDTO.setRoleSet(roleSet);
-
-        // 註冊
-        register(userDTO);
-
-        // 設定請求路徑、參數
-        RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/users/login")
-                .with(httpBasic("test@gmail.com", "12"));
+                .header("Authorization", "Bearer " + "test");
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
@@ -242,8 +145,7 @@ public class UserControllerTest {
                 .put("/users/update")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
-                .with(csrf())
-                .with(httpBasic("test1@gmail.com", "111"));
+                .header("Authorization", "Bearer " + TEST_ACCESS_TOKEN);
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
@@ -256,10 +158,10 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.roleSet", notNullValue()));
     }
 
-    // 更新會員角色，403
+    // 更新會員角色，401
     @Transactional
     @Test
-    public void updateUserRolesByEmailOnForbidden() throws Exception {
+    public void updateUserRolesByEmailOnFail() throws Exception {
         // 建立 json 內容
         RoleDTO roleDTO = new RoleDTO();
         roleDTO.setEmail("test3@gmail.com");
@@ -273,13 +175,12 @@ public class UserControllerTest {
                 .put("/users/update")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
-                .with(csrf())
-                .with(httpBasic("test2@gmail.com", "222"));
+                .header("Authorization", "Bearer " + "test");
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
                 .andDo(print())
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 
     // 依 email 取得用戶資訊，200
@@ -289,7 +190,7 @@ public class UserControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/users/search")
                 .param("email", "test2@gmail.com")
-                .with(httpBasic("test1@gmail.com", "111"));
+                .header("Authorization", "Bearer " + TEST_ACCESS_TOKEN);
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
@@ -297,19 +198,19 @@ public class UserControllerTest {
                 .andExpect(status().isOk());
     }
 
-    // 依 email 取得用戶資訊，403
+    // 依 email 取得用戶資訊，401
     @Test
-    public void getUserByEmailOnForbidden() throws Exception {
+    public void getUserByEmailOnFail() throws Exception {
         // 設定請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/users/search")
                 .param("email", "test2@gmail.com")
-                .with(httpBasic("test2@gmail.com", "222"));
+                .header("Authorization", "Bearer " + "test");
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
                 .andDo(print())
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 
     // 刪除帳號，204
@@ -319,8 +220,7 @@ public class UserControllerTest {
         // 設定請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/users/{userId}/delete", 1)
-                .with(csrf())
-                .with(httpBasic("test1@gmail.com", "111"));
+                .header("Authorization", "Bearer " + TEST_ACCESS_TOKEN);
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
@@ -328,19 +228,18 @@ public class UserControllerTest {
                 .andExpect(status().isNoContent());
     }
 
-    // 刪除帳號，400
+    // 刪除帳號，401
     @Transactional
     @Test
-    public void deleteUserOnForbidden() throws Exception {
+    public void deleteUserOnFail() throws Exception {
         // 設定請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/users/{userId}/delete", 1)
-                .with(csrf())
-                .with(httpBasic("test2@gmail.com", "222"));
+                .header("Authorization", "Bearer " + "test");
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnauthorized());
     }
 }

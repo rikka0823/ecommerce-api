@@ -16,4 +16,7 @@ public interface UserDao {
 
     // 刪除帳號
     void deleteUser(Integer userId);
+
+    // 依 email 更新 refresh_token
+    void updateRefreshTokenByEmail(String email, String refreshToken);
 }
