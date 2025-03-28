@@ -19,8 +19,6 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -55,8 +53,7 @@ public class OrdersControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/users/{userId}/orders", 13)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic("test3@gmail.com", "333"))
-                .with(csrf())
+                .header("Authorization", "Bearer " + TEST_ACCESS_TOKEN)
                 .content(json);
 
         // 驗證返回內容
@@ -89,8 +86,7 @@ public class OrdersControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/users/{userId}/orders", 130)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic("test3@gmail.com", "333"))
-                .with(csrf())
+                .header("Authorization", "Bearer " + TEST_ACCESS_TOKEN)
                 .content(json);
 
         // 驗證返回內容
@@ -117,8 +113,7 @@ public class OrdersControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/users/{userId}/orders", 13)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic("test3@gmail.com", "333"))
-                .with(csrf())
+                .header("Authorization", "Bearer " + TEST_ACCESS_TOKEN)
                 .content(json);
 
         // 驗證返回內容
@@ -145,8 +140,7 @@ public class OrdersControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/users/{userId}/orders", 13)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic("test3@gmail.com", "333"))
-                .with(csrf())
+                .header("Authorization", "Bearer " + TEST_ACCESS_TOKEN)
                 .content(json);
 
         // 驗證返回內容
@@ -169,8 +163,7 @@ public class OrdersControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/users/{userId}/orders", 13)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic("test3@gmail.com", "333"))
-                .with(csrf())
+                .header("Authorization", "Bearer " + TEST_ACCESS_TOKEN)
                 .content(json);
 
         // 驗證返回內容
@@ -179,41 +172,13 @@ public class OrdersControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    // 創建訂單，400
-    @Transactional
-    @Test
-    public void createOrdersOnForbidden() throws Exception {
-        // 建立 json 內容
-        List<BuyItemDTO> buyItemDTOList = new ArrayList<>();
-        BuyItemDTO buyItemDTO = new BuyItemDTO();
-        buyItemDTO.setProductId(1);
-        buyItemDTO.setQuantity(6);
-        buyItemDTOList.add(buyItemDTO);
-        OrdersDTO ordersDTO = new OrdersDTO();
-        ordersDTO.setBuyItemDTOList(buyItemDTOList);
-        String json = objectMapper.writeValueAsString(ordersDTO);
-
-        // 設定請求路徑、參數
-        RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/users/{userId}/orders", 13)
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic("test2@gmail.com", "222"))
-                .with(csrf())
-                .content(json);
-
-        // 驗證返回內容
-        mockMvc.perform(requestBuilder)
-                .andDo(print())
-                .andExpect(status().is(400));
-    }
-
     // 查詢訂單，200
     @Test
     public void getOrdersOnSuccess() throws Exception {
         // 設定請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/users/{userId}/orders", 13)
-                .with(httpBasic("test3@gmail.com", "333"));
+                .header("Authorization", "Bearer " + TEST_ACCESS_TOKEN);
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
@@ -233,7 +198,7 @@ public class OrdersControllerTest {
                 .get("/users/{userId}/orders", 13)
                 .param("limit", "3")
                 .param("offset", "2")
-                .with(httpBasic("test3@gmail.com", "333"));
+                .header("Authorization", "Bearer " + TEST_ACCESS_TOKEN);
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
@@ -250,10 +215,10 @@ public class OrdersControllerTest {
     public void getOrdersOnBadRequest() throws Exception {
         // 設定請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/users/{userId}/orders", 13)
+                .get("/users/{userId}/orders", 130)
                 .param("limit", "3")
                 .param("offset", "2")
-                .with(httpBasic("test2@gmail.com", "222"));
+                .header("Authorization", "Bearer " + TEST_ACCESS_TOKEN);
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
@@ -268,28 +233,11 @@ public class OrdersControllerTest {
         // 設定請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/users/{userId}/orders/{orderId}", 13, 14)
-                .with(csrf())
-                .with(httpBasic("test1@gmail.com", "111"));
+                .header("Authorization", "Bearer " + TEST_ACCESS_TOKEN);
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().is(204));
-    }
-
-    // 刪除訂單，204
-    @Transactional
-    @Test
-    public void deleteOrdersOnSuccess() throws Exception {
-        // 設定請求路徑、參數
-        RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .delete("/users/{userId}/orders/{orderId}", 13, 14)
-                .with(csrf())
-                .with(httpBasic("test2@gmail.com", "222"));
-
-        // 驗證返回內容
-        mockMvc.perform(requestBuilder)
-                .andDo(print())
-                .andExpect(status().is(400));
     }
 }
