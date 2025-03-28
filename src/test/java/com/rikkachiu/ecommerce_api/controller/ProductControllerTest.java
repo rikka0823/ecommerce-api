@@ -5,6 +5,7 @@ import com.rikkachiu.ecommerce_api.constant.ProductCategory;
 import com.rikkachiu.ecommerce_api.model.dto.ProductDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -23,6 +24,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ProductControllerTest {
+
+    @Value("${test.access.token}")
+    private String TEST_ACCESS_TOKEN;
 
     @Autowired
     MockMvc mockMvc;
@@ -164,8 +168,7 @@ public class ProductControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic("test3@gmail.com", "333"))
-                .with(csrf())
+                .header("Authorization", "Bearer " + TEST_ACCESS_TOKEN)
                 .content(json);
 
         // 驗證返回內容
@@ -200,8 +203,7 @@ public class ProductControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic("test3@gmail.com", "333"))
-                .with(csrf())
+                .header("Authorization", "Bearer " + TEST_ACCESS_TOKEN)
                 .content(json);
 
         // 驗證返回內容
@@ -210,7 +212,7 @@ public class ProductControllerTest {
                 .andExpect(status().is(400));
     }
 
-    // 新增商品，403
+    // 新增商品，401
     @Transactional
     @Test
     public void createProductOnForbidden() throws Exception {
@@ -227,14 +229,13 @@ public class ProductControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic("test2@gmail.com", "222"))
-                .with(csrf())
+                .header("Authorization", "Bearer " + "TEST_ACCESS_TOKEN")
                 .content(json);
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
                 .andDo(print())
-                .andExpect(status().is(403));
+                .andExpect(status().is(401));
     }
 
     // 依 id 更新商品，200
@@ -254,8 +255,7 @@ public class ProductControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .put("/products/{productId}", 1)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic("test3@gmail.com", "333"))
-                .with(csrf())
+                .header("Authorization", "Bearer " + TEST_ACCESS_TOKEN)
                 .content(json);
 
         // 驗證返回內容
@@ -281,8 +281,7 @@ public class ProductControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .put("/products/{productId}", 9)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic("test3@gmail.com", "333"))
-                .with(csrf())
+                .header("Authorization", "Bearer " + TEST_ACCESS_TOKEN)
                 .content(json);
 
         // 驗證返回內容
@@ -291,7 +290,7 @@ public class ProductControllerTest {
                 .andExpect(status().is(404));
     }
 
-    // 依 id 更新商品，403
+    // 依 id 更新商品，401
     @Transactional
     @Test
     public void updateProductOnForbidden() throws Exception {
@@ -308,14 +307,13 @@ public class ProductControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .put("/products/{productId}", 1)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic("test2@gmail.com", "222"))
-                .with(csrf())
+                .header("Authorization", "Bearer " + "TEST_ACCESS_TOKEN")
                 .content(json);
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
                 .andDo(print())
-                .andExpect(status().is(403));
+                .andExpect(status().is(401));
     }
 
     // 依 id 刪除商品，204
@@ -325,8 +323,7 @@ public class ProductControllerTest {
         // 設請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/products/{productId}", 100)
-                .with(csrf())
-                .with(httpBasic("test1@gmail.com", "111"));
+                .header("Authorization", "Bearer " + TEST_ACCESS_TOKEN);
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
@@ -334,19 +331,18 @@ public class ProductControllerTest {
                 .andExpect(status().isNoContent());
     }
 
-    // 依 id 刪除商品，204
+    // 依 id 刪除商品，401
     @Transactional
     @Test
     public void deleteProductByIdOnForbidden() throws Exception {
         // 設請求路徑、參數
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/products/{productId}", 100)
-                .with(csrf())
-                .with(httpBasic("test2@gmail.com", "222"));
+                .header("Authorization", "Bearer " + "TEST_ACCESS_TOKEN");
 
         // 驗證返回內容
         mockMvc.perform(requestBuilder)
                 .andDo(print())
-                .andExpect(status().is(403));
+                .andExpect(status().is(401));
     }
 }

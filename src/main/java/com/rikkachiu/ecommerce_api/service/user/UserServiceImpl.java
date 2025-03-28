@@ -159,7 +159,7 @@ public class UserServiceImpl implements UserService {
                 user.setRoleSet(roleDao.getRolesById(user.getUserId()));
                 return user;
             }
-            throw new  ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
         // JWT 來源

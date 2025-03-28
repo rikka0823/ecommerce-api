@@ -20,23 +20,6 @@ public class ProductDaoImpl implements ProductDao {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    //新增篩選條件 sql
-    private void addFilteringSql(ProductQueryParamsDTO productQueryParamsDTO, StringBuilder sql,
-                                 MapSqlParameterSource params) {
-        // 依據 category 添加篩選條件
-        if (productQueryParamsDTO.getCategory() != null) {
-            sql.append(" AND category = :category");
-            params.addValue("category", productQueryParamsDTO.getCategory().name());
-        }
-
-        // 依據 search 添加篩選條件
-        if (productQueryParamsDTO.getSearch() != null &&
-                !productQueryParamsDTO.getSearch().trim().isEmpty()) {
-            sql.append(" AND product_name LIKE :search");
-            params.addValue("search", "%" + productQueryParamsDTO.getSearch().trim() + "%");
-        }
-    }
-
     // 查詢商品總數
     @Override
     public Integer getProductCount(ProductQueryParamsDTO productQueryParamsDTO) {
@@ -181,5 +164,22 @@ public class ProductDaoImpl implements ProductDao {
 
         // 刪除商品
         namedParameterJdbcTemplate.update(sql, params);
+    }
+
+    // 新增篩選條件 sql
+    private void addFilteringSql(ProductQueryParamsDTO productQueryParamsDTO, StringBuilder sql,
+                                 MapSqlParameterSource params) {
+        // 依據 category 添加篩選條件
+        if (productQueryParamsDTO.getCategory() != null) {
+            sql.append(" AND category = :category");
+            params.addValue("category", productQueryParamsDTO.getCategory().name());
+        }
+
+        // 依據 search 添加篩選條件
+        if (productQueryParamsDTO.getSearch() != null &&
+                !productQueryParamsDTO.getSearch().trim().isEmpty()) {
+            sql.append(" AND product_name LIKE :search");
+            params.addValue("search", "%" + productQueryParamsDTO.getSearch().trim() + "%");
+        }
     }
 }
