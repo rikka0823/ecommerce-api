@@ -3,6 +3,8 @@ package com.rikkachiu.ecommerce_api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rikkachiu.ecommerce_api.constant.Role;
 import com.rikkachiu.ecommerce_api.dao.user.UserDao;
+import com.rikkachiu.ecommerce_api.model.dto.CodeDTO;
+import com.rikkachiu.ecommerce_api.model.dto.RefreshTokenDTO;
 import com.rikkachiu.ecommerce_api.model.dto.RoleDTO;
 import com.rikkachiu.ecommerce_api.model.dto.UserDTO;
 import org.junit.jupiter.api.Test;
@@ -23,8 +25,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -241,5 +242,55 @@ public class UserControllerTest {
         mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
+    }
+
+    // 生成授權網址
+    @Test
+    public void buildAuthUrl() throws Exception {
+        // 設定請求路徑
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/keycloak/buildAuthUrl");
+
+        // 驗證返回內容
+        mockMvc.perform(requestBuilder)
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("text/plain;charset=UTF-8"));
+    }
+
+    // 獲取 access token 和 refresh token，400
+    @Transactional
+    @Test
+    public void getToken() throws Exception {
+        // 設定請求路徑、參數
+        CodeDTO codeDTO = new CodeDTO();
+        codeDTO.setCode("test");
+        codeDTO.setEmail("test1@gmail.com");
+        String json = objectMapper.writeValueAsString(codeDTO);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/keycloak/getToken")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        // 驗證返回內容
+        mockMvc.perform(requestBuilder)
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    // 以 refresh_token 換取 access_token
+    @Test
+    public void exchangeAccessToken() throws Exception {
+        RefreshTokenDTO refreshTokenDTO = new RefreshTokenDTO();
+        refreshTokenDTO.setRefreshToken("test");
+        String json = objectMapper.writeValueAsString(refreshTokenDTO);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/keycloak/exchangeAccessToken")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mockMvc.perform(requestBuilder)
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 }
