@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,10 +31,11 @@ public class OrdersController {
     public ResponseEntity<Orders> createOrders(
             @PathVariable Integer userId,
             @RequestBody @Valid OrdersDTO ordersDTO,
-            Authentication authentication
+            Authentication authentication,
+            @AuthenticationPrincipal Jwt jwt
     ) {
         // 依 email 檢查是否符合當前獲取資源 userId
-        userService.checkUserIdByEmail(authentication, userId);
+        userService.checkUserIdByEmail(authentication, jwt, userId);
 
         // 取得 id 及對應物件
         int orderId = ordersService.createOrders(userId, ordersDTO);
@@ -54,10 +55,11 @@ public class OrdersController {
             @PathVariable Integer userId,
             @RequestParam(defaultValue = "5") @Max(25) @Min(0) Integer limit,
             @RequestParam(defaultValue = "0") Integer offset,
-            Authentication authentication
+            Authentication authentication,
+            @AuthenticationPrincipal Jwt jwt
     ) {
         // 依 email 檢查是否符合當前獲取資源 userId
-        userService.checkUserIdByEmail(authentication, userId);
+        userService.checkUserIdByEmail(authentication, jwt, userId);
 
         // 將查詢參數封裝
         OrdersQueryParamsDTO ordersQueryParamsDTO = OrdersQueryParamsDTO.builder()
@@ -80,9 +82,10 @@ public class OrdersController {
     public ResponseEntity<?> deleteOrders(
             @PathVariable Integer userId,
             @PathVariable Integer orderId,
-            Authentication authentication
+            Authentication authentication,
+            @AuthenticationPrincipal Jwt jwt
     ) {
-        ordersService.deleteOrders(userId, orderId, authentication);
+        ordersService.deleteOrders(userId, orderId, authentication, jwt);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

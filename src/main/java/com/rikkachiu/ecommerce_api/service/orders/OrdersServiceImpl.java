@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -41,14 +43,6 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Autowired
     private UserService userService;
-
-    // 檢查 userId 是否存在
-    private void existsById(Integer userId) {
-        if (userDao.getUserById(userId) == null) {
-            logger.warn("userId: {} 不存在", userId);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "查無此 userId: " + userId);
-        }
-    }
 
     // 創建訂單
     @Transactional
@@ -145,10 +139,16 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     // 刪除訂單
+    @Transactional
     @Override
-    public void deleteOrders(Integer userId, Integer orderId, Authentication authentication) {
+    public void deleteOrders(Integer userId, Integer orderId, Authentication authentication, Jwt jwt) {
         // 依 email 查詢 user
-        User user = userService.getUserByEmail(authentication.getName());
+        User user;
+        if (authentication instanceof OidcUser oidcUser) {
+            user = userService.getUserByEmail(oidcUser.getEmail());
+        } else {
+            user = userService.getUserByEmail(jwt.getClaimAsString("email"));
+        }
         Set<Role> roleSet = user.getRoleSet();
         List<Integer> orderIds = ordersDao.getOrdersIds(user.getUserId());
 
@@ -164,7 +164,27 @@ public class OrdersServiceImpl implements OrdersService {
             }
         }
 
+        // 封裝 orderItemList、productList
+        List<OrderItem> orderItemList = ordersDao.getOrderItemsById(orderId);
+        List<Product> productList = new ArrayList<>();
+        for (OrderItem orderItem : orderItemList) {
+            Product product = productDao.getProductById(orderItem.getProductId());
+            product.setStock(product.getStock() + orderItem.getQuantity());
+            productList.add(product);
+        }
+
+        // 批量更新商品庫存
+        productDao.updateProductStock(productList);
+
         // 依 orderId 刪除訂單
         ordersDao.deleteOrders(orderId);
+    }
+
+    // 檢查 userId 是否存在
+    private void existsById(Integer userId) {
+        if (userDao.getUserById(userId) == null) {
+            logger.warn("userId: {} 不存在", userId);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "查無此 userId: " + userId);
+        }
     }
 }

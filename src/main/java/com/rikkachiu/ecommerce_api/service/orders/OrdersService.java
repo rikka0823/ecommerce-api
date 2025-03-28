@@ -4,6 +4,7 @@ import com.rikkachiu.ecommerce_api.model.dto.OrdersDTO;
 import com.rikkachiu.ecommerce_api.model.dto.OrdersQueryParamsDTO;
 import com.rikkachiu.ecommerce_api.model.pojo.Orders;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.util.List;
 
@@ -22,5 +23,5 @@ public interface OrdersService {
     List<Orders> getOrders(Integer userId, OrdersQueryParamsDTO ordersQueryParamsDTO);
 
     // 刪除訂單
-    void deleteOrders(Integer userId, Integer orderId, Authentication authentication);
+    void deleteOrders(Integer userId, Integer orderId, Authentication authentication, Jwt jwt);
 }

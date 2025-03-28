@@ -15,7 +15,7 @@ public interface UserService {
     User getUserByEmail(String email);
 
     // 依 email 檢查是否符合當前獲取資源 userId
-    void checkUserIdByEmail(Authentication authentication, Integer userId);
+    void checkUserIdByEmail(Authentication authentication, Jwt jwt, Integer userId);
 
     // 依 id 取得用戶資訊
     User getUserById(Integer userId);

@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
 
     // 依 email 檢查是否符合當前獲取資源 userId
     @Override
-    public void checkUserIdByEmail(Authentication authentication, Integer userId) {
+    public void checkUserIdByEmail(Authentication authentication, Jwt jwt, Integer userId) {
         // 取得 user 權限
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Set<Role> roleSet = new HashSet<>();
@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
         if (authentication.getPrincipal() instanceof OidcUser oidcUser) {
             user = userDao.getUserByEmail(oidcUser.getEmail());
         } else {
-            user = userDao.getUserByEmail(authentication.getName());
+            user = userDao.getUserByEmail(jwt.getClaimAsString("email"));
         }
 
         // 限制 ROLE_CUSTOMER 權限
