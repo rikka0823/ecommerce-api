@@ -6,6 +6,8 @@ import com.rikkachiu.ecommerce_api.model.dto.PageDTO;
 import com.rikkachiu.ecommerce_api.model.pojo.Orders;
 import com.rikkachiu.ecommerce_api.service.orders.OrdersService;
 import com.rikkachiu.ecommerce_api.service.user.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -17,6 +19,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "訂單功能", description = "創建訂單、查詢所有訂單，依不同條件、刪除訂單")
 @RestController
 public class OrdersController {
 
@@ -26,7 +29,7 @@ public class OrdersController {
     @Autowired
     private UserService userService;
 
-    // 創建訂單
+    @Operation(summary = "創建", description = "依 userId 創建訂單")
     @PostMapping("/users/{userId}/orders")
     public ResponseEntity<Orders> createOrders(
             @PathVariable Integer userId,
@@ -49,7 +52,7 @@ public class OrdersController {
         return ResponseEntity.status(HttpStatus.CREATED).body(orders);
     }
 
-    // 查詢所有訂單，依不同條件
+    @Operation(summary = "查詢", description = "查詢所有訂單，依不同條件")
     @GetMapping("/users/{userId}/orders")
     public ResponseEntity<PageDTO<Orders>> getOrders(
             @PathVariable Integer userId,
@@ -77,7 +80,7 @@ public class OrdersController {
         return ResponseEntity.status(HttpStatus.OK).body(pageDTO);
     }
 
-    // 刪除訂單
+    @Operation(summary = "刪除", description = "依 userId 及 orderId 刪除訂單")
     @DeleteMapping("/users/{userId}/orders/{orderId}")
     public ResponseEntity<?> deleteOrders(
             @PathVariable Integer userId,

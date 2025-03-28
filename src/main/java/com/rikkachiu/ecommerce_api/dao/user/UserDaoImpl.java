@@ -59,7 +59,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Integer createUser(UserDTO userDTO) {
         // sql 語法與欄位映射
-        String sql = "INSERT INTO `user` (email, password, created_date, last_modified_date, provider_user_id, provider, refresh_token) " +
+        String sql = "INSERT INTO `user` (email, password, created_date, last_modified_date, provider_user_id, provider) " +
                 "VALUES (:email, :password, :createdDate, :lastModifiedDate, :providerUserId, :provider);";
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("email", userDTO.getEmail())

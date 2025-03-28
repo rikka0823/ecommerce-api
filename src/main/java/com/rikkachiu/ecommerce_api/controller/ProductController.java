@@ -8,6 +8,8 @@ import com.rikkachiu.ecommerce_api.model.dto.ProductDTO;
 import com.rikkachiu.ecommerce_api.model.dto.ProductQueryParamsDTO;
 import com.rikkachiu.ecommerce_api.model.pojo.Product;
 import com.rikkachiu.ecommerce_api.service.product.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "商品功能", description = "查詢所有商品，依不同條件、依 id 查詢商品、新增商品、依 id 更新商品、依 id 刪除商品")
 @Validated
 @RestController
 public class ProductController {
@@ -24,7 +27,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    // 查詢所有商品，依不同條件
+    @Operation(summary = "查詢", description = "查詢所有商品，依不同條件")
     @GetMapping("/products")
     public ResponseEntity<PageDTO<Product>> getProducts(
             // filtering
@@ -67,7 +70,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(pageDTO);
     }
 
-    // 依 id 查詢商品
+    @Operation(summary = "查詢", description = "依 productId 查詢商品")
     @GetMapping("/products/{productId}")
     public ResponseEntity<Product> getProductById(@PathVariable Integer productId) {
         // 依 id 取得物件
@@ -81,7 +84,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
-    // 新增商品
+    @Operation(summary = "新增商品")
     @PostMapping("/products")
     public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductDTO productDTO) {
         // 取得 id 及對應物件
@@ -96,7 +99,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 
-    // 依 id 更新商品
+    @Operation(summary = "更新", description = "依 productId 更新商品")
     @PutMapping("/products/{productId}")
     public ResponseEntity<Product> updateProduct(@PathVariable Integer productId,
                                                  @RequestBody @Valid ProductDTO productDTO) {
@@ -111,7 +114,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(productService.getProductById(productId));
     }
 
-    // 依 id 刪除商品
+    @Operation(summary = "刪除", description = "依 productId 刪除商品")
     @DeleteMapping("/products/{productId}")
     public ResponseEntity<?> deleteProductById(@PathVariable Integer productId) {
         // 刪除商品

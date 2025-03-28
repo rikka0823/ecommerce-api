@@ -62,9 +62,9 @@ public class SecurityConfig {
 
                 // 請求路徑設定
                 .authorizeHttpRequests(request -> request
-                        // 允許所有人註冊、登入、查詢商品、獲取 token
+                        // 允許所有人註冊、登入、查詢商品、獲取 token、swagger api
                         .requestMatchers(HttpMethod.POST, "/users/register", "/keycloak/getToken", "/keycloak/exchangeAccessToken").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/products", "/products/{productId}", "/keycloak/buildAuthUrl").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/products", "/products/{productId}", "/keycloak/buildAuthUrl", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
                         // 會員、訂單、商品增刪查改權限
                         .requestMatchers(HttpMethod.POST, "/users/{userId}/orders", "/users/login").hasAnyRole("ADMIN", "SELLER", "CUSTOMER")
