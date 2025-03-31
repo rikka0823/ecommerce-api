@@ -73,7 +73,7 @@ public class ProductDaoImpl implements ProductDao {
         String sql = "SELECT product_id, product_name, category, image_url, " +
                 "price, stock, description, created_date, last_modified_date " +
                 "FROM product " +
-                "WHERE product_id = :productId";
+                "WHERE product_id = :productId FOR UPDATE";
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("productId", productId);
 

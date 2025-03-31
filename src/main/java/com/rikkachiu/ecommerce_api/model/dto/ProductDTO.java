@@ -24,6 +24,7 @@ public class ProductDTO {
     private Integer price;
 
     @NotNull
+    @Min(value = 0)
     private Integer stock;
 
     private String description;

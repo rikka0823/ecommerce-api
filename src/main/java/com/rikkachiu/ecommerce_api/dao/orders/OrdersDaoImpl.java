@@ -95,13 +95,6 @@ public class OrdersDaoImpl implements OrdersDao {
         return namedParameterJdbcTemplate.query(sql, params, new OrderItemRowMapper());
     }
 
-    //新增篩選條件 sql
-    private void addFilteringSql(Integer userId,  StringBuilder sql,
-                                 MapSqlParameterSource params) {
-        sql.append(" AND user_id = :userId");
-        params.addValue("userId", userId);
-    }
-
     // 查詢訂單總數
     @Override
     public Integer getOrdersCount(Integer userId) {
@@ -145,6 +138,7 @@ public class OrdersDaoImpl implements OrdersDao {
         return namedParameterJdbcTemplate.query(sql.toString(), params, new OrdersRowMapper());
     }
 
+    // 取得所有訂單號碼
     @Override
     public List<Integer> getOrdersIds(Integer userId) {
         // sql 語法與欄位映射
@@ -169,5 +163,12 @@ public class OrdersDaoImpl implements OrdersDao {
                 .addValue("orderId", orderId);
 
         namedParameterJdbcTemplate.update(sql, params);
+    }
+
+    // 新增篩選條件 sql
+    private void addFilteringSql(Integer userId,  StringBuilder sql,
+                                 MapSqlParameterSource params) {
+        sql.append(" AND user_id = :userId");
+        params.addValue("userId", userId);
     }
 }
