@@ -14,10 +14,13 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.TimeUnit;
 
 @Tag(name = "商品功能", description = "查詢所有商品，依不同條件、依 id 查詢商品、新增商品、依 id 更新商品、依 id 刪除商品")
 @Validated
@@ -67,7 +70,9 @@ public class ProductController {
         pageDTO.setTotal(productService.getProductCount(productQueryParamsDTO));
         pageDTO.setResults(productService.getProducts(productQueryParamsDTO));
 
-        return ResponseEntity.status(HttpStatus.OK).body(pageDTO);
+        return ResponseEntity.status(HttpStatus.OK)
+                .cacheControl(CacheControl.maxAge(15, TimeUnit.MINUTES))
+                .body(pageDTO);
     }
 
     @Operation(summary = "查詢", description = "依 productId 查詢商品")
@@ -81,7 +86,9 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(product);
+        return ResponseEntity.status(HttpStatus.OK)
+                .cacheControl(CacheControl.maxAge(15, TimeUnit.MINUTES))
+                .body(product);
     }
 
     @Operation(summary = "新增商品")

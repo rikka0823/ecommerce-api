@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -71,6 +73,7 @@ public class UserServiceImpl implements UserService {
     private RoleDao roleDao;
 
     // 依 email 取得用戶資訊
+    @Cacheable(cacheNames = "ecommerce_user", key = "'email-' + #p0", unless = "#result == null")
     @Override
     public User getUserByEmail(String email) {
         // 依 email 查詢 user 並封裝 role
@@ -112,6 +115,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // 依 id 取得用戶資訊
+    @Cacheable(cacheNames = "ecommerce_user", key = "'userId-' + #p0", unless = "#result == null")
     @Override
     public User getUserById(Integer userId) {
         // 依 id 查詢 user 並封裝 role
@@ -125,6 +129,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // 建立帳號
+    @CacheEvict(cacheNames = "ecommerce_user", allEntries = true)
     @Transactional
     @Override
     public Integer register(UserDTO userDTO) {
@@ -169,6 +174,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // 依照 email 更新用戶角色
+    @CacheEvict(cacheNames = "ecommerce_user", allEntries = true)
     @Transactional
     @Override
     public User updateUserRolesByEmail(RoleDTO roleDTO) {
@@ -190,6 +196,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // 刪除帳號
+    @CacheEvict(cacheNames = "ecommerce_user", allEntries = true)
     @Override
     public void deleteUser(Authentication authentication, Jwt jwt, Integer userId) {
         // 取得 user

@@ -12,12 +12,17 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.TimeUnit;
+
+import static org.springframework.data.redis.connection.ReactiveStreamCommands.AddStreamRecord.body;
 
 @Tag(name = "訂單功能", description = "創建訂單、查詢所有訂單，依不同條件、刪除訂單")
 @RestController
@@ -77,7 +82,9 @@ public class OrdersController {
         pageDTO.setTotal(ordersService.getOrdersCount(userId));
         pageDTO.setResults(ordersService.getOrders(userId, ordersQueryParamsDTO));
 
-        return ResponseEntity.status(HttpStatus.OK).body(pageDTO);
+        return ResponseEntity.status(HttpStatus.OK)
+                .cacheControl(CacheControl.maxAge(15, TimeUnit.MINUTES))
+                .body(pageDTO);
     }
 
     @Operation(summary = "刪除", description = "依 userId 及 orderId 刪除訂單")

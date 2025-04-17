@@ -15,6 +15,8 @@ import com.rikkachiu.ecommerce_api.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
@@ -45,6 +47,7 @@ public class OrdersServiceImpl implements OrdersService {
     private UserService userService;
 
     // 創建訂單
+    @CacheEvict(cacheNames = "ecommerce_orders", allEntries = true)
     @Transactional
     @Override
     public Integer createOrders(Integer userId, OrdersDTO ordersDTO) {
@@ -106,6 +109,8 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     //取得訂單
+    @Cacheable(cacheNames = "ecommerce_orders", key = "'orderId-' + #p0",
+            unless = "#result == null")
     @Override
     public Orders getOrdersById(Integer orderId) {
         // 封裝 Orders 物件
@@ -116,6 +121,8 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     // 查詢訂單總數
+    @Cacheable(cacheNames = "ecommerce_orders", key = "'userId-' + #p0",
+            unless = "#result == null")
     @Override
     public Integer getOrdersCount(Integer userId) {
         // 檢查 userId 是否存在
@@ -124,6 +131,9 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     // 查詢所有訂單，依不同條件
+    @Cacheable(cacheNames = "ecommerce_orders",
+            key = "'userId-' + #p0 + '-' + #p1.limit + '-' + #p1.offset",
+            unless = "#result == null")
     @Override
     public List<Orders> getOrders(Integer userId, OrdersQueryParamsDTO ordersQueryParamsDTO) {
         // 檢查 userId 是否存在
@@ -139,6 +149,7 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     // 刪除訂單
+    @CacheEvict(cacheNames = "ecommerce_orders", allEntries = true)
     @Transactional
     @Override
     public void deleteOrders(Integer userId, Integer orderId, Authentication authentication, Jwt jwt) {
