@@ -1,0 +1,7 @@
+SET NAMES utf8mb4;
+SET CHARACTER SET utf8mb4;
+
+INSERT INTO `user` (`user_id`,`email`,`password`,`created_date`,`last_modified_date`,`provider_user_id`,`provider`,`refresh_token`) VALUES (12,'test1@gmail.com','$2a$10$aUfRIOYPn/C2pwjLnz3iMuFgJW.5QSp2aoaj1cL1qMP/dYMsF0Woe','2025-02-28 14:26:27','2025-02-28 14:26:27',NULL,NULL,'eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJhOTA1ZTljYi05ZjU4LTRkYTMtYTkzZi05MDE5ZDk0NWMyYjAifQ.eyJleHAiOjE3NDQ4OTc5NTksImlhdCI6MTc0NDg5NjE1OSwianRpIjoiNmEzYzkyYTctYjZiNy00MGI2LWI2ODAtZDFhMjRiODUwOWNiIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1NTAwL3JlYWxtcy9tYXN0ZXIiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjU1MDAvcmVhbG1zL21hc3RlciIsInN1YiI6IjkyMmY0YTQ4LTdiY2EtNDNiZi1hNGRjLWZiY2NlMmVmZjJhOCIsInR5cCI6IlJlZnJlc2giLCJhenAiOiJteS10ZXN0LWNsaWVudCIsInNpZCI6ImNmNDE3MWFiLThlMWUtNDQ4ZS1iMDU1LTg2NWYzMWZkZjAwMCIsInNjb3BlIjoib3BlbmlkIHJvbGVzIHdlYi1vcmlnaW5zIGFjciBiYXNpYyBlbWFpbCBwcm9maWxlIHJlYWQifQ.w-1Paq76C1EcaC7MqhcQWN28RKb_J2FIWhAr7q6sh91-Ayv6KbMgiSZJ2MOSx0ygNhrMjR7JVaLUYXDU-9GrAg');
+INSERT INTO `user` (`user_id`,`email`,`password`,`created_date`,`last_modified_date`,`provider_user_id`,`provider`,`refresh_token`) VALUES (13,'test3@gmail.com','$2a$10$YBV0mwoLiZcx4H.O1crhzesqME/WAR12RZ4vsx3SMy2hFDe.JtMuC','2025-02-28 19:14:07','2025-02-28 19:14:07',NULL,NULL,NULL);
+INSERT INTO `user` (`user_id`,`email`,`password`,`created_date`,`last_modified_date`,`provider_user_id`,`provider`,`refresh_token`) VALUES (14,'test2@gmail.com','$2a$10$cSADPsDTfXcYDjWzzusBHuiI33JYHmI3aFCfP7IF3AkhneRfDlzZS','2025-03-04 23:12:37','2025-03-04 23:12:37',NULL,NULL,NULL);
+

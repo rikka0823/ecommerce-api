@@ -1,0 +1,44 @@
+services:
+  mysql-db:
+    container_name: mydb
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rikka0823/mysql-db
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    networks:
+      my-bridge-002:
+    volumes:
+      - db-data:/var/lib/mysql
+
+  redis-db:
+    container_name: redis-db
+    image: redis:latest
+    ports:
+      - "6380:6379"
+    networks:
+      my-bridge-002:
+    volumes:
+      - redis-data:/data
+
+  web:
+    container_name: web
+    build:
+      context: ./web
+    ports:
+      - "80:80"
+    networks:
+      - my-bridge-002
+
+networks:
+  my-bridge-002:
+
+volumes:
+  db-data:
+  redis-data:

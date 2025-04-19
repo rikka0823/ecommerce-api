@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <style>
+      .title a {
+        font-size: 18px;
+        text-decoration: none;
+      }
+  
+      a.show-url {
+        &::after {
+          content: attr(href);
+        }
+      }
+  
+      body {
+        margin: 0 20px 50px 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2 class="title">
+      這是使用 OAuth 2.0 向 Keycloak 取得 access_token 的跳轉頁面
+    </h2>
+    <hr>
+
+    <h3>1. 點擊 url，跳轉到 Keycloak 的授權頁面，開始 OAuth 2.0 的流程</h3>
+    <a class="show-url" href="http://localhost:5500/realms/master/protocol/openid-connect/auth?response_type=code&client_id=my-test-client&scope=openid+profile+email&redirect_uri=http://localhost"></a>
+    
+    <h3>2. 取得 url 中返回的 code 的值，使用 Postman 請求 Keycloak，完成 OAuth 2.0 的授權流程</h3>
+    <a href="https://semalt.tools/en/url-parser" target="_blank">URL 解析工具</a>
+
+    <p>如果要管理keycloak底下的帳號，如權限，帳號密碼可先分別設定admin，並設定為authorization code(授權碼流程)，redirect uri為*，以及client id 可設定為my-test-client</p>
+    <p>設定完後，可去spring boot 填寫client secret</p>
+    <p>role可分別設定ADMIN、SELLER、CUSTOMER</p>
+
+    <p>對應資料庫的</p>
+    <p>userId / 角色: 帳號 / 密碼</p>
+    <p>12 / admin: test1@gmail.com / 111</p>
+    <p>13 / seller,customer: test3@gmail.com / 333</p>
+    <p>14 / customer: test2@gmail.com / 222</p>
+
+  </body>
+</html>
