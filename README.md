@@ -25,7 +25,7 @@
 - **Keycloak 25.0.6**：採用開源軟體架設 Authorization Server，與 Spring Security 整合，支援 JWT 驗證和授權，實作 OAuth 2.0 授權碼流程（Authorization code flow）。
 - **OAuth 2.0**：串接 Google、Facebook 社交登入（Social Login），提供用戶第三方平台註冊與登入。
 - **MySQL 8.0.40**：關聯式資料庫管理系統，欄位設計以一對一、一對多、多對多，及採用角色存取控制（RBAC）模型方式，儲存用戶資訊、角色、商品等資訊；並結合 Spring Boot 的 @Transactional，處理 ACID 之交易特性。
-- **redis**：作為非關聯式資料庫，採用 Cache Aside Pattern，儲存熱門查詢資訊，輔助 MySQL，減少資料庫讀取壓力。 
+- **Redis**：作為非關聯式資料庫，採用 Cache Aside Pattern，儲存熱門查詢資訊，輔助 MySQL，減少資料庫讀取壓力。 
 - **H2 Database**：嵌入式資料庫，採 In-Memory 模式，結合單元測試，不持久化資料，建立乾淨測試環境。
 - **JUnit 5**：針對重要商業邏輯撰寫單元測試，如用戶註冊，訂單、列表查詢等，確保程式的穩定性與可靠性，程式碼覆蓋率（Code Coverage），約70%。
 - **Springdoc OpenAPI**：用於生成 Swagger UI 文件，詳細描述 API 端點。
