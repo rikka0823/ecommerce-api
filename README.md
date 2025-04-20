@@ -30,7 +30,7 @@
 - **JUnit 5**：針對重要商業邏輯撰寫單元測試，如用戶註冊，訂單、列表查詢等，確保程式的穩定性與可靠性，程式碼覆蓋率（Code Coverage），約70%。
 - **Springdoc OpenAPI**：用於生成 Swagger UI 文件，詳細描述 API 端點。
 - **Nginx**：靜態網頁資源的存放伺服器，模擬前端授權碼流程，作為 OAuth 2.0 流程中的重定向頁面（redirect URIs）。
-- **Docker**：編寫 Dockerfile 以建立前端跳轉頁面（web）、MySQL 資料庫的容器映像檔（image），並使用 Docker Compose 管理多容器架構，整合 Nginx、MySQL、redis，建立開發一致環境。
+- **Docker**：編寫 Dockerfile 以建立前端跳轉頁面（web）、MySQL 資料庫的容器映像檔（image），並使用 Docker Compose 管理多容器架構，整合 Nginx、MySQL、Redis，建立開發一致環境。
 
 ## Running the Project in Docker and OAuth 2.0
 
