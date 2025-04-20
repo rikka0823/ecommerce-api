@@ -1,6 +1,6 @@
 # ecommerce-api
 
-`ecommerce-api` 是一個基於 Spring Boot 的後端應用程式，旨在提供電子商務系統所需的 API 功能，包括商品管理、訂單處理和會員管理等。
+`ecommerce-api` 是一個基於 Spring Boot 的後端應用程式，旨在提供**電子商務系統**所需的 API 功能，包括商品管理、訂單處理和會員管理等。
 
 ## Project Structure
 
