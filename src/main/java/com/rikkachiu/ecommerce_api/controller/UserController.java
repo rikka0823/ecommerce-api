@@ -58,7 +58,7 @@ public class UserController {
     public ResponseEntity<User> userLogin(Authentication authentication,
                                           @AuthenticationPrincipal Jwt jwt,
                                           HttpServletRequest request) {
-        // 紀錄登入帳號來源，OAuth2.0、JWT
+        // 記錄登入帳號來源，OAuth2.0、JWT
         if (authentication.getPrincipal() instanceof OidcUser oidcUser) {
             logger.info("使用者： {} 正從 {} 嘗試登入，{}", oidcUser.getEmail(), request.getHeader("User-Agent"), new Date());
         }

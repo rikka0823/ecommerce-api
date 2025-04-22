@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.springframework.data.redis.connection.ReactiveStreamCommands.AddStreamRecord.body;
-
 @Tag(name = "訂單功能", description = "創建訂單、查詢所有訂單，依不同條件、刪除訂單")
 @RestController
 public class OrdersController {
