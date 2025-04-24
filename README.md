@@ -17,7 +17,7 @@
 此專案使用以下技術：
 
 - **Java 17**：作為開發語言。
-- **Spring Boot 3.4.3**：作為應用核心框架，簡化開發流程並提升可維護性，並搭配 **Maven** 進行構建與依賴管理。
+- **Spring Boot 3.4.5**：作為應用核心框架，簡化開發流程並提升可維護性，並搭配 **Maven** 進行構建與依賴管理。
 - **Lombok**：透過註解簡化物件開發流程，並以 @Builder 實現建構者模式（Builder Pattern），提升物件建立的可讀性與維護性。
 - **Spring JDBC**：採用底層 JDBC 與資料庫連接。實作上，以動態拼接 SQL 語法，動態調整列表查詢方式、處理批量更新（batchUpdate），並結合悲觀鎖（Pessimistic Lock）處理超賣等問題。相較於 ORM 框架（如 JPA），更具彈性。也避免額外的物件映射層，帶來更好的效能。
 - **Spring Validation**：以 @Valid、@Validated 處理 Exception，並建立 GlobalExceptionHandler，採用 @ExceptionHandler 客製化錯誤、例外返回 JSON 訊息。
