@@ -2,7 +2,7 @@ package com.rikkachiu.ecommerce_api.dao.orders;
 
 import com.rikkachiu.ecommerce_api.mapper.OrderItemRowMapper;
 import com.rikkachiu.ecommerce_api.mapper.OrdersRowMapper;
-import com.rikkachiu.ecommerce_api.model.dto.OrdersQueryParamsDTO;
+import com.rikkachiu.ecommerce_api.model.dto.OrdersQueryParamsDto;
 import com.rikkachiu.ecommerce_api.model.pojo.OrderItem;
 import com.rikkachiu.ecommerce_api.model.pojo.Orders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,7 +116,7 @@ public class OrdersDaoImpl implements OrdersDao {
 
     // 查詢所有訂單，依不同條件
     @Override
-    public List<Orders> getOrders(Integer userId, OrdersQueryParamsDTO ordersQueryParamsDTO) {
+    public List<Orders> getOrders(Integer userId, OrdersQueryParamsDto ordersQueryParamsDTO) {
         // sql 語法與欄位映射
         StringBuilder sql = new StringBuilder("SELECT order_id, user_id, total_amount, created_date, last_modified_date " +
                 "FROM orders " +

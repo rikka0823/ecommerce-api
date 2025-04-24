@@ -1,8 +1,8 @@
 package com.rikkachiu.ecommerce_api.controller;
 
-import com.rikkachiu.ecommerce_api.model.dto.OrdersDTO;
-import com.rikkachiu.ecommerce_api.model.dto.OrdersQueryParamsDTO;
-import com.rikkachiu.ecommerce_api.model.dto.PageDTO;
+import com.rikkachiu.ecommerce_api.model.dto.OrdersDto;
+import com.rikkachiu.ecommerce_api.model.dto.OrdersQueryParamsDto;
+import com.rikkachiu.ecommerce_api.model.dto.PageDto;
 import com.rikkachiu.ecommerce_api.model.pojo.Orders;
 import com.rikkachiu.ecommerce_api.service.orders.OrdersService;
 import com.rikkachiu.ecommerce_api.service.user.UserService;
@@ -36,7 +36,7 @@ public class OrdersController {
     @PostMapping("/users/{userId}/orders")
     public ResponseEntity<Orders> createOrders(
             @PathVariable Integer userId,
-            @RequestBody @Valid OrdersDTO ordersDTO,
+            @RequestBody @Valid OrdersDto ordersDTO,
             Authentication authentication,
             @AuthenticationPrincipal Jwt jwt
     ) {
@@ -57,7 +57,7 @@ public class OrdersController {
 
     @Operation(summary = "查詢", description = "查詢所有訂單，依不同條件")
     @GetMapping("/users/{userId}/orders")
-    public ResponseEntity<PageDTO<Orders>> getOrders(
+    public ResponseEntity<PageDto<Orders>> getOrders(
             @PathVariable Integer userId,
             @RequestParam(defaultValue = "5") @Max(25) @Min(0) Integer limit,
             @RequestParam(defaultValue = "0") Integer offset,
@@ -68,13 +68,13 @@ public class OrdersController {
         userService.checkUserIdByEmail(authentication, jwt, userId);
 
         // 將查詢參數封裝
-        OrdersQueryParamsDTO ordersQueryParamsDTO = OrdersQueryParamsDTO.builder()
+        OrdersQueryParamsDto ordersQueryParamsDTO = OrdersQueryParamsDto.builder()
                 .limit(limit)
                 .offset(offset)
                 .build();
 
         // 將 返回資料封裝在 PageDTO<Orders>
-        PageDTO<Orders> pageDTO = new PageDTO<>();
+        PageDto<Orders> pageDTO = new PageDto<>();
         pageDTO.setLimit(limit);
         pageDTO.setOffset(offset);
         pageDTO.setTotal(ordersService.getOrdersCount(userId));

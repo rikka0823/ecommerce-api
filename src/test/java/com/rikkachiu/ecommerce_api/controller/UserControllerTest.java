@@ -3,10 +3,10 @@ package com.rikkachiu.ecommerce_api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rikkachiu.ecommerce_api.constant.Role;
 import com.rikkachiu.ecommerce_api.dao.user.UserDao;
-import com.rikkachiu.ecommerce_api.model.dto.CodeDTO;
-import com.rikkachiu.ecommerce_api.model.dto.RefreshTokenDTO;
-import com.rikkachiu.ecommerce_api.model.dto.RoleDTO;
-import com.rikkachiu.ecommerce_api.model.dto.UserDTO;
+import com.rikkachiu.ecommerce_api.model.dto.CodeDto;
+import com.rikkachiu.ecommerce_api.model.dto.RefreshTokenDto;
+import com.rikkachiu.ecommerce_api.model.dto.RoleDto;
+import com.rikkachiu.ecommerce_api.model.dto.UserDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,7 +47,7 @@ public class UserControllerTest {
     @Test
     public void registerOnSuccess() throws Exception {
         // 建立 json 內容
-        UserDTO userDTO = new UserDTO();
+        UserDto userDTO = new UserDto();
         userDTO.setEmail("test@gmail.com");
         userDTO.setPassword("123");
         Set<Role> roleSet = new HashSet<>();
@@ -77,7 +77,7 @@ public class UserControllerTest {
     @Test
     public void registerByInvalidEmailFormat() throws Exception {
         // 建立 json 內容
-        UserDTO userDTO = new UserDTO();
+        UserDto userDTO = new UserDto();
         userDTO.setEmail("testgmail.com");
         userDTO.setPassword("123");
         Set<Role> roleSet = new HashSet<>();
@@ -134,7 +134,7 @@ public class UserControllerTest {
     @Test
     public void updateUserRolesByEmailOnSuccess() throws Exception {
         // 建立 json 內容
-        RoleDTO roleDTO = new RoleDTO();
+        RoleDto roleDTO = new RoleDto();
         roleDTO.setEmail("test3@gmail.com");
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(Role.ROLE_ADMIN);
@@ -164,7 +164,7 @@ public class UserControllerTest {
     @Test
     public void updateUserRolesByEmailOnFail() throws Exception {
         // 建立 json 內容
-        RoleDTO roleDTO = new RoleDTO();
+        RoleDto roleDTO = new RoleDto();
         roleDTO.setEmail("test3@gmail.com");
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(Role.ROLE_ADMIN);
@@ -263,7 +263,7 @@ public class UserControllerTest {
     @Test
     public void getToken() throws Exception {
         // 設定請求路徑、參數
-        CodeDTO codeDTO = new CodeDTO();
+        CodeDto codeDTO = new CodeDto();
         codeDTO.setCode("test");
         codeDTO.setEmail("test1@gmail.com");
         String json = objectMapper.writeValueAsString(codeDTO);
@@ -281,7 +281,7 @@ public class UserControllerTest {
     // 以 refresh_token 換取 access_token
     @Test
     public void exchangeAccessToken() throws Exception {
-        RefreshTokenDTO refreshTokenDTO = new RefreshTokenDTO();
+        RefreshTokenDto refreshTokenDTO = new RefreshTokenDto();
         refreshTokenDTO.setRefreshToken("test");
         String json = objectMapper.writeValueAsString(refreshTokenDTO);
         RequestBuilder requestBuilder = MockMvcRequestBuilders

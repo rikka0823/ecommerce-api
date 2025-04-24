@@ -3,10 +3,10 @@ package com.rikkachiu.ecommerce_api.service.user;
 import com.rikkachiu.ecommerce_api.constant.Role;
 import com.rikkachiu.ecommerce_api.dao.role.RoleDao;
 import com.rikkachiu.ecommerce_api.dao.user.UserDao;
-import com.rikkachiu.ecommerce_api.model.dto.CodeDTO;
-import com.rikkachiu.ecommerce_api.model.dto.RefreshTokenDTO;
-import com.rikkachiu.ecommerce_api.model.dto.RoleDTO;
-import com.rikkachiu.ecommerce_api.model.dto.UserDTO;
+import com.rikkachiu.ecommerce_api.model.dto.CodeDto;
+import com.rikkachiu.ecommerce_api.model.dto.RefreshTokenDto;
+import com.rikkachiu.ecommerce_api.model.dto.RoleDto;
+import com.rikkachiu.ecommerce_api.model.dto.UserDto;
 import com.rikkachiu.ecommerce_api.model.pojo.KeycloakToken;
 import com.rikkachiu.ecommerce_api.model.pojo.User;
 import org.slf4j.Logger;
@@ -132,7 +132,7 @@ public class UserServiceImpl implements UserService {
     @CacheEvict(cacheNames = "ecommerce_user", allEntries = true)
     @Transactional
     @Override
-    public Integer register(UserDTO userDTO) {
+    public Integer register(UserDto userDTO) {
         // 檢查 email 是否已存在
         if (userDao.getUserByEmail(userDTO.getEmail()) != null) {
             logger.warn("email: {} 已存在", userDTO.getEmail());
@@ -177,7 +177,7 @@ public class UserServiceImpl implements UserService {
     @CacheEvict(cacheNames = "ecommerce_user", allEntries = true)
     @Transactional
     @Override
-    public User updateUserRolesByEmail(RoleDTO roleDTO) {
+    public User updateUserRolesByEmail(RoleDto roleDTO) {
         // 依 email 查詢 user 是否存在
         User user = userDao.getUserByEmail(roleDTO.getEmail());
         if (user == null) {
@@ -246,7 +246,7 @@ public class UserServiceImpl implements UserService {
 
     // 獲取 access token 和 refresh token
     @Override
-    public KeycloakToken getToken(CodeDTO codeDTO) {
+    public KeycloakToken getToken(CodeDto codeDTO) {
         // 設定 headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -279,7 +279,7 @@ public class UserServiceImpl implements UserService {
 
     // 以 refresh_token 換取 access_token
     @Override
-    public String exchangeAccessToken(RefreshTokenDTO refreshTokenDTO) {
+    public String exchangeAccessToken(RefreshTokenDto refreshTokenDTO) {
         // 設定 headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);

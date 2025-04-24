@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ProductQueryParamsDTO {
+public class ProductQueryParamsDto {
 
     private ProductCategory category;
     private String search;

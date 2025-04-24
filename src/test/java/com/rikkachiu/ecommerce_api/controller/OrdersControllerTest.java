@@ -1,8 +1,8 @@
 package com.rikkachiu.ecommerce_api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rikkachiu.ecommerce_api.model.dto.BuyItemDTO;
-import com.rikkachiu.ecommerce_api.model.dto.OrdersDTO;
+import com.rikkachiu.ecommerce_api.model.dto.BuyItemDto;
+import com.rikkachiu.ecommerce_api.model.dto.OrdersDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,13 +40,13 @@ public class OrdersControllerTest {
     @Test
     public void createOrdersOnSuccess() throws Exception {
         // 建立 json 內容
-        List<BuyItemDTO> buyItemDTOList = new ArrayList<>();
-        BuyItemDTO buyItemDTO = new BuyItemDTO();
+        List<BuyItemDto> buyItemDtoList = new ArrayList<>();
+        BuyItemDto buyItemDTO = new BuyItemDto();
         buyItemDTO.setProductId(1);
         buyItemDTO.setQuantity(6);
-        buyItemDTOList.add(buyItemDTO);
-        OrdersDTO ordersDTO = new OrdersDTO();
-        ordersDTO.setBuyItemDTOList(buyItemDTOList);
+        buyItemDtoList.add(buyItemDTO);
+        OrdersDto ordersDTO = new OrdersDto();
+        ordersDTO.setBuyItemDtoList(buyItemDtoList);
         String json = objectMapper.writeValueAsString(ordersDTO);
 
         // 設定請求路徑、參數
@@ -73,13 +73,13 @@ public class OrdersControllerTest {
     @Test
     public void createOrdersOnUserIdNotExists() throws Exception {
         // 建立 json 內容
-        List<BuyItemDTO> buyItemDTOList = new ArrayList<>();
-        BuyItemDTO buyItemDTO = new BuyItemDTO();
+        List<BuyItemDto> buyItemDtoList = new ArrayList<>();
+        BuyItemDto buyItemDTO = new BuyItemDto();
         buyItemDTO.setProductId(1);
         buyItemDTO.setQuantity(6);
-        buyItemDTOList.add(buyItemDTO);
-        OrdersDTO ordersDTO = new OrdersDTO();
-        ordersDTO.setBuyItemDTOList(buyItemDTOList);
+        buyItemDtoList.add(buyItemDTO);
+        OrdersDto ordersDTO = new OrdersDto();
+        ordersDTO.setBuyItemDtoList(buyItemDtoList);
         String json = objectMapper.writeValueAsString(ordersDTO);
 
         // 設定請求路徑、參數
@@ -100,13 +100,13 @@ public class OrdersControllerTest {
     @Test
     public void createOrdersOnStockNotEnough() throws Exception {
         // 建立 json 內容
-        List<BuyItemDTO> buyItemDTOList = new ArrayList<>();
-        BuyItemDTO buyItemDTO = new BuyItemDTO();
+        List<BuyItemDto> buyItemDtoList = new ArrayList<>();
+        BuyItemDto buyItemDTO = new BuyItemDto();
         buyItemDTO.setProductId(1);
         buyItemDTO.setQuantity(60);
-        buyItemDTOList.add(buyItemDTO);
-        OrdersDTO ordersDTO = new OrdersDTO();
-        ordersDTO.setBuyItemDTOList(buyItemDTOList);
+        buyItemDtoList.add(buyItemDTO);
+        OrdersDto ordersDTO = new OrdersDto();
+        ordersDTO.setBuyItemDtoList(buyItemDtoList);
         String json = objectMapper.writeValueAsString(ordersDTO);
 
         // 設定請求路徑、參數
@@ -127,13 +127,13 @@ public class OrdersControllerTest {
     @Test
     public void createOrdersOnProductIdNotExists() throws Exception {
         // 建立 json 內容
-        List<BuyItemDTO> buyItemDTOList = new ArrayList<>();
-        BuyItemDTO buyItemDTO = new BuyItemDTO();
+        List<BuyItemDto> buyItemDtoList = new ArrayList<>();
+        BuyItemDto buyItemDTO = new BuyItemDto();
         buyItemDTO.setProductId(100);
         buyItemDTO.setQuantity(6);
-        buyItemDTOList.add(buyItemDTO);
-        OrdersDTO ordersDTO = new OrdersDTO();
-        ordersDTO.setBuyItemDTOList(buyItemDTOList);
+        buyItemDtoList.add(buyItemDTO);
+        OrdersDto ordersDTO = new OrdersDto();
+        ordersDTO.setBuyItemDtoList(buyItemDtoList);
         String json = objectMapper.writeValueAsString(ordersDTO);
 
         // 設定請求路徑、參數
@@ -154,9 +154,9 @@ public class OrdersControllerTest {
     @Test
     public void createOrdersOnBadRequest() throws Exception {
         // 建立 json 內容
-        List<BuyItemDTO> buyItemDTOList = new ArrayList<>();
-        OrdersDTO ordersDTO = new OrdersDTO();
-        ordersDTO.setBuyItemDTOList(buyItemDTOList);
+        List<BuyItemDto> buyItemDtoList = new ArrayList<>();
+        OrdersDto ordersDTO = new OrdersDto();
+        ordersDTO.setBuyItemDtoList(buyItemDtoList);
         String json = objectMapper.writeValueAsString(ordersDTO);
 
         // 設定請求路徑、參數

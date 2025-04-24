@@ -1,9 +1,9 @@
 package com.rikkachiu.ecommerce_api.service.user;
 
-import com.rikkachiu.ecommerce_api.model.dto.CodeDTO;
-import com.rikkachiu.ecommerce_api.model.dto.RefreshTokenDTO;
-import com.rikkachiu.ecommerce_api.model.dto.RoleDTO;
-import com.rikkachiu.ecommerce_api.model.dto.UserDTO;
+import com.rikkachiu.ecommerce_api.model.dto.CodeDto;
+import com.rikkachiu.ecommerce_api.model.dto.RefreshTokenDto;
+import com.rikkachiu.ecommerce_api.model.dto.RoleDto;
+import com.rikkachiu.ecommerce_api.model.dto.UserDto;
 import com.rikkachiu.ecommerce_api.model.pojo.KeycloakToken;
 import com.rikkachiu.ecommerce_api.model.pojo.User;
 import org.springframework.security.core.Authentication;
@@ -21,13 +21,13 @@ public interface UserService {
     User getUserById(Integer userId);
 
     // 建立帳號
-    Integer register(UserDTO userDTO);
+    Integer register(UserDto userDTO);
 
     // 登入
     User userLogin(Authentication authentication, Jwt jwt);
 
     // 依照 email 更新用戶角色
-    User updateUserRolesByEmail(RoleDTO roleDTO);
+    User updateUserRolesByEmail(RoleDto roleDTO);
 
     // 刪除帳號
     void deleteUser(Authentication authentication, Jwt jwt, Integer userId);
@@ -36,8 +36,8 @@ public interface UserService {
     String buildAuthUrl();
 
     // 獲取 access token 和 refresh token
-    KeycloakToken getToken(CodeDTO codeDTO);
+    KeycloakToken getToken(CodeDto codeDTO);
 
     // 以 refresh_token 換取 access_token
-    String exchangeAccessToken(RefreshTokenDTO refreshTokenDTO);
+    String exchangeAccessToken(RefreshTokenDto refreshTokenDTO);
 }

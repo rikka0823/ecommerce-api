@@ -2,7 +2,7 @@ package com.rikkachiu.ecommerce_api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rikkachiu.ecommerce_api.constant.ProductCategory;
-import com.rikkachiu.ecommerce_api.model.dto.ProductDTO;
+import com.rikkachiu.ecommerce_api.model.dto.ProductDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -154,7 +154,7 @@ public class ProductControllerTest {
     @Test
     public void createProductOnSuccess() throws Exception {
         // 建立 json 內容
-        ProductDTO productDTO = new ProductDTO();
+        ProductDto productDTO = new ProductDto();
         productDTO.setProductName("apple_book");
         productDTO.setCategory(ProductCategory.E_BOOK);
         productDTO.setStock(1);
@@ -189,7 +189,7 @@ public class ProductControllerTest {
     @Test
     public void createProductOnBadRequest() throws Exception {
         // 建立 json 內容
-        ProductDTO productDTO = new ProductDTO();
+        ProductDto productDTO = new ProductDto();
         productDTO.setProductName("apple_book");
         productDTO.setCategory(ProductCategory.E_BOOK);
         productDTO.setStock(null);
@@ -215,7 +215,7 @@ public class ProductControllerTest {
     @Test
     public void createProductOnForbidden() throws Exception {
         // 建立 json 內容
-        ProductDTO productDTO = new ProductDTO();
+        ProductDto productDTO = new ProductDto();
         productDTO.setProductName("apple_book");
         productDTO.setCategory(ProductCategory.E_BOOK);
         productDTO.setStock(1);
@@ -241,7 +241,7 @@ public class ProductControllerTest {
     @Test
     public void updateProductOnSuccess() throws Exception {
         // 建立 json 內容
-        ProductDTO productDTO = new ProductDTO();
+        ProductDto productDTO = new ProductDto();
         productDTO.setProductName("apple_book");
         productDTO.setCategory(ProductCategory.E_BOOK);
         productDTO.setStock(2);
@@ -267,7 +267,7 @@ public class ProductControllerTest {
     @Test
     public void updateProductOnNotFound() throws Exception {
         // 建立 json 內容
-        ProductDTO productDTO = new ProductDTO();
+        ProductDto productDTO = new ProductDto();
         productDTO.setProductName("apple_book");
         productDTO.setCategory(ProductCategory.E_BOOK);
         productDTO.setStock(2);
@@ -293,7 +293,7 @@ public class ProductControllerTest {
     @Test
     public void updateProductOnForbidden() throws Exception {
         // 建立 json 內容
-        ProductDTO productDTO = new ProductDTO();
+        ProductDto productDTO = new ProductDto();
         productDTO.setProductName("apple_book");
         productDTO.setCategory(ProductCategory.E_BOOK);
         productDTO.setStock(2);

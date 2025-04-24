@@ -7,9 +7,9 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class OrdersDTO {
+public class OrdersDto {
 
     @JsonProperty("buyItemList")
     @NotEmpty
-    private List<BuyItemDTO> buyItemDTOList;
+    private List<BuyItemDto> buyItemDtoList;
 }

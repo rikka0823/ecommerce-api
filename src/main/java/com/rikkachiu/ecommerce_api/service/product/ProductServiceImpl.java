@@ -1,8 +1,8 @@
 package com.rikkachiu.ecommerce_api.service.product;
 
 import com.rikkachiu.ecommerce_api.dao.product.ProductDao;
-import com.rikkachiu.ecommerce_api.model.dto.ProductDTO;
-import com.rikkachiu.ecommerce_api.model.dto.ProductQueryParamsDTO;
+import com.rikkachiu.ecommerce_api.model.dto.ProductDto;
+import com.rikkachiu.ecommerce_api.model.dto.ProductQueryParamsDto;
 import com.rikkachiu.ecommerce_api.model.pojo.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -23,7 +23,7 @@ public class ProductServiceImpl implements ProductService {
                     "#p0.sort + '-' + " + "#p0.limit + '-' + #p0.offset",
             unless = "#result == null")
     @Override
-    public Integer getProductCount(ProductQueryParamsDTO productQueryParamsDTO) {
+    public Integer getProductCount(ProductQueryParamsDto productQueryParamsDTO) {
         return productDao.getProductCount(productQueryParamsDTO);
     }
 
@@ -33,7 +33,7 @@ public class ProductServiceImpl implements ProductService {
                     "#p0.sort + '-' + " + "#p0.limit + '-' + #p0.offset",
             unless = "#result == null")
     @Override
-    public List<Product> getProducts(ProductQueryParamsDTO productQueryParamsDTO) {
+    public List<Product> getProducts(ProductQueryParamsDto productQueryParamsDTO) {
         return productDao.getProducts(productQueryParamsDTO);
     }
 
@@ -49,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
     @CacheEvict(cacheNames = {"ecommerce_getProductCount", "ecommerce_product", "ecommerce_getProductById"},
             allEntries = true)
     @Override
-    public Integer createProduct(ProductDTO productDTO) {
+    public Integer createProduct(ProductDto productDTO) {
         return productDao.createProduct(productDTO);
     }
 
@@ -57,7 +57,7 @@ public class ProductServiceImpl implements ProductService {
     @CacheEvict(cacheNames = {"ecommerce_getProductCount", "ecommerce_product", "ecommerce_getProductById"},
             allEntries = true)
     @Override
-    public void updateProduct(Integer id, ProductDTO productDTO) {
+    public void updateProduct(Integer id, ProductDto productDTO) {
         productDao.updateProduct(id, productDTO);
     }
 

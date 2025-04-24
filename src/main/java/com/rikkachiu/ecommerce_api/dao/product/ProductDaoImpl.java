@@ -1,8 +1,8 @@
 package com.rikkachiu.ecommerce_api.dao.product;
 
 import com.rikkachiu.ecommerce_api.mapper.ProductRowMapper;
-import com.rikkachiu.ecommerce_api.model.dto.ProductDTO;
-import com.rikkachiu.ecommerce_api.model.dto.ProductQueryParamsDTO;
+import com.rikkachiu.ecommerce_api.model.dto.ProductDto;
+import com.rikkachiu.ecommerce_api.model.dto.ProductQueryParamsDto;
 import com.rikkachiu.ecommerce_api.model.pojo.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -22,7 +22,7 @@ public class ProductDaoImpl implements ProductDao {
 
     // 查詢商品總數
     @Override
-    public Integer getProductCount(ProductQueryParamsDTO productQueryParamsDTO) {
+    public Integer getProductCount(ProductQueryParamsDto productQueryParamsDTO) {
         // sql 語法與欄位映射
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM product WHERE 1=1");
         MapSqlParameterSource params = new MapSqlParameterSource();
@@ -41,7 +41,7 @@ public class ProductDaoImpl implements ProductDao {
 
     // 查詢所有商品，依不同條件
     @Override
-    public List<Product> getProducts(ProductQueryParamsDTO productQueryParamsDTO) {
+    public List<Product> getProducts(ProductQueryParamsDto productQueryParamsDTO) {
         // sql 語法與欄位映射
         StringBuilder sql = new StringBuilder("SELECT product_id, product_name, category, image_url, " +
                 "price, stock, description, created_date, last_modified_date " +
@@ -89,7 +89,7 @@ public class ProductDaoImpl implements ProductDao {
 
     // 新增商品
     @Override
-    public Integer createProduct(ProductDTO productDTO) {
+    public Integer createProduct(ProductDto productDTO) {
         // sql 語法與欄位映射
         String sql = "INSERT INTO product (product_name, category, image_url, price, stock, " +
                 "description, created_date, last_modified_date) " +
@@ -115,7 +115,7 @@ public class ProductDaoImpl implements ProductDao {
 
     // 依 id 更新商品
     @Override
-    public void updateProduct(Integer productId, ProductDTO productDTO) {
+    public void updateProduct(Integer productId, ProductDto productDTO) {
         // sql 語法與欄位映射
         String sql = "UPDATE product " +
                 "SET product_name = :productName, category = :category, image_url = :imageUrl, price = :price, " +
@@ -167,7 +167,7 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     // 新增篩選條件 sql
-    private void addFilteringSql(ProductQueryParamsDTO productQueryParamsDTO, StringBuilder sql,
+    private void addFilteringSql(ProductQueryParamsDto productQueryParamsDTO, StringBuilder sql,
                                  MapSqlParameterSource params) {
         // 依據 category 添加篩選條件
         if (productQueryParamsDTO.getCategory() != null) {

@@ -4,9 +4,9 @@ import com.rikkachiu.ecommerce_api.constant.Role;
 import com.rikkachiu.ecommerce_api.dao.orders.OrdersDao;
 import com.rikkachiu.ecommerce_api.dao.product.ProductDao;
 import com.rikkachiu.ecommerce_api.dao.user.UserDao;
-import com.rikkachiu.ecommerce_api.model.dto.BuyItemDTO;
-import com.rikkachiu.ecommerce_api.model.dto.OrdersDTO;
-import com.rikkachiu.ecommerce_api.model.dto.OrdersQueryParamsDTO;
+import com.rikkachiu.ecommerce_api.model.dto.BuyItemDto;
+import com.rikkachiu.ecommerce_api.model.dto.OrdersDto;
+import com.rikkachiu.ecommerce_api.model.dto.OrdersQueryParamsDto;
 import com.rikkachiu.ecommerce_api.model.pojo.OrderItem;
 import com.rikkachiu.ecommerce_api.model.pojo.Orders;
 import com.rikkachiu.ecommerce_api.model.pojo.Product;
@@ -50,7 +50,7 @@ public class OrdersServiceImpl implements OrdersService {
     @CacheEvict(cacheNames = "ecommerce_orders", allEntries = true)
     @Transactional
     @Override
-    public Integer createOrders(Integer userId, OrdersDTO ordersDTO) {
+    public Integer createOrders(Integer userId, OrdersDto ordersDTO) {
         // 檢查 userId 是否存在
         existsById(userId);
 
@@ -60,7 +60,7 @@ public class OrdersServiceImpl implements OrdersService {
 
         // 計算金額、封裝 orderItemList、productList
         int totalAmount = 0;
-        for (BuyItemDTO buyItemDTO : ordersDTO.getBuyItemDTOList()) {
+        for (BuyItemDto buyItemDTO : ordersDTO.getBuyItemDtoList()) {
             // 檢查 productId是否存在、有足夠庫存
             Product product = productDao.getProductById(buyItemDTO.getProductId());
             if (product == null) {
@@ -135,7 +135,7 @@ public class OrdersServiceImpl implements OrdersService {
             key = "'userId-' + #p0 + '-' + #p1.limit + '-' + #p1.offset",
             unless = "#result == null")
     @Override
-    public List<Orders> getOrders(Integer userId, OrdersQueryParamsDTO ordersQueryParamsDTO) {
+    public List<Orders> getOrders(Integer userId, OrdersQueryParamsDto ordersQueryParamsDTO) {
         // 檢查 userId 是否存在
         existsById(userId);
 

@@ -1,12 +1,14 @@
 package com.rikkachiu.ecommerce_api.model.dto;
 
-import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-@Builder
-public class OrdersQueryParamsDTO {
+public class PageDto<T> {
 
     private Integer limit;
     private Integer offset;
+    private Integer total;
+    private List<T> results;
 }

@@ -3,9 +3,9 @@ package com.rikkachiu.ecommerce_api.controller;
 import com.rikkachiu.ecommerce_api.constant.ProductCategory;
 import com.rikkachiu.ecommerce_api.constant.ProductOrderBy;
 import com.rikkachiu.ecommerce_api.constant.ProductSort;
-import com.rikkachiu.ecommerce_api.model.dto.PageDTO;
-import com.rikkachiu.ecommerce_api.model.dto.ProductDTO;
-import com.rikkachiu.ecommerce_api.model.dto.ProductQueryParamsDTO;
+import com.rikkachiu.ecommerce_api.model.dto.PageDto;
+import com.rikkachiu.ecommerce_api.model.dto.ProductDto;
+import com.rikkachiu.ecommerce_api.model.dto.ProductQueryParamsDto;
 import com.rikkachiu.ecommerce_api.model.pojo.Product;
 import com.rikkachiu.ecommerce_api.service.product.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +32,7 @@ public class ProductController {
 
     @Operation(summary = "查詢", description = "查詢所有商品，依不同條件")
     @GetMapping("/products")
-    public ResponseEntity<PageDTO<Product>> getProducts(
+    public ResponseEntity<PageDto<Product>> getProducts(
             // filtering
             @RequestParam(required = false) ProductCategory category,
             @RequestParam(required = false) String search,
@@ -54,7 +54,7 @@ public class ProductController {
         }
 
         // 將查詢參數封裝
-        ProductQueryParamsDTO productQueryParamsDTO = ProductQueryParamsDTO.builder()
+        ProductQueryParamsDto productQueryParamsDTO = ProductQueryParamsDto.builder()
                 .category(category)
                 .search(search)
                 .orderBy(orderBy.name().toLowerCase())
@@ -64,7 +64,7 @@ public class ProductController {
                 .build();
 
         // 將 返回資料封裝在 PageDTO<Product>
-        PageDTO<Product> pageDTO =  new PageDTO<>();
+        PageDto<Product> pageDTO =  new PageDto<>();
         pageDTO.setLimit(limit);
         pageDTO.setOffset(offset);
         pageDTO.setTotal(productService.getProductCount(productQueryParamsDTO));
@@ -93,7 +93,7 @@ public class ProductController {
 
     @Operation(summary = "新增商品")
     @PostMapping("/products")
-    public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductDTO productDTO) {
+    public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductDto productDTO) {
         // 取得 id 及對應物件
         int id = productService.createProduct(productDTO);
         Product product = productService.getProductById(id);
@@ -109,7 +109,7 @@ public class ProductController {
     @Operation(summary = "更新", description = "依 productId 更新商品")
     @PutMapping("/products/{productId}")
     public ResponseEntity<Product> updateProduct(@PathVariable Integer productId,
-                                                 @RequestBody @Valid ProductDTO productDTO) {
+                                                 @RequestBody @Valid ProductDto productDTO) {
         // 檢查商品 id 是否存在
         if (productService.getProductById(productId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

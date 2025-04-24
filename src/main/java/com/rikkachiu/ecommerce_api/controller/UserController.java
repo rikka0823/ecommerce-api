@@ -1,9 +1,9 @@
 package com.rikkachiu.ecommerce_api.controller;
 
-import com.rikkachiu.ecommerce_api.model.dto.CodeDTO;
-import com.rikkachiu.ecommerce_api.model.dto.RefreshTokenDTO;
-import com.rikkachiu.ecommerce_api.model.dto.RoleDTO;
-import com.rikkachiu.ecommerce_api.model.dto.UserDTO;
+import com.rikkachiu.ecommerce_api.model.dto.CodeDto;
+import com.rikkachiu.ecommerce_api.model.dto.RefreshTokenDto;
+import com.rikkachiu.ecommerce_api.model.dto.RoleDto;
+import com.rikkachiu.ecommerce_api.model.dto.UserDto;
 import com.rikkachiu.ecommerce_api.model.pojo.KeycloakToken;
 import com.rikkachiu.ecommerce_api.model.pojo.User;
 import com.rikkachiu.ecommerce_api.service.user.UserService;
@@ -40,7 +40,7 @@ public class UserController {
 
     @Operation(summary = "建立帳號")
     @PostMapping("/users/register")
-    public ResponseEntity<User> register(@RequestBody @Valid UserDTO userDTO) {
+    public ResponseEntity<User> register(@RequestBody @Valid UserDto userDTO) {
         // 取得 id 及對應物件
         int userId = userService.register(userDTO);
         User user = userService.getUserById(userId);
@@ -83,7 +83,7 @@ public class UserController {
 
     @Operation(summary = "更新", description = "依照 email 更新用戶角色")
     @PutMapping("/users/update")
-    public ResponseEntity<User> updateUserRolesByEmail(@RequestBody @Valid RoleDTO roleDTO) {
+    public ResponseEntity<User> updateUserRolesByEmail(@RequestBody @Valid RoleDto roleDTO) {
         // 更新 user，並檢查是否為 null
         User user = userService.updateUserRolesByEmail(roleDTO);
         if (user == null) {
@@ -110,13 +110,13 @@ public class UserController {
 
     @Operation(summary = "獲取 access token 和 refresh token")
     @PostMapping("/keycloak/getToken")
-    public ResponseEntity<KeycloakToken> getToken(@RequestBody @Valid CodeDTO codeDTO) {
+    public ResponseEntity<KeycloakToken> getToken(@RequestBody @Valid CodeDto codeDTO) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getToken(codeDTO));
     }
 
     @Operation(summary = "以 refresh_token 換取 access_token")
     @PostMapping("/keycloak/exchangeAccessToken")
-    public ResponseEntity<String> exchangeAccessToken(@RequestBody @Valid RefreshTokenDTO refreshTokenDTO) {
+    public ResponseEntity<String> exchangeAccessToken(@RequestBody @Valid RefreshTokenDto refreshTokenDTO) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.exchangeAccessToken(refreshTokenDTO));
     }
 }

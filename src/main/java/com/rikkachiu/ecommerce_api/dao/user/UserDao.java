@@ -1,6 +1,6 @@
 package com.rikkachiu.ecommerce_api.dao.user;
 
-import com.rikkachiu.ecommerce_api.model.dto.UserDTO;
+import com.rikkachiu.ecommerce_api.model.dto.UserDto;
 import com.rikkachiu.ecommerce_api.model.pojo.User;
 
 public interface UserDao {
@@ -12,7 +12,7 @@ public interface UserDao {
     User getUserByEmail(String email);
 
     // 建立帳號
-    Integer createUser(UserDTO userDTO);
+    Integer createUser(UserDto userDTO);
 
     // 刪除帳號
     void deleteUser(Integer userId);

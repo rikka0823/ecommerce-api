@@ -8,7 +8,7 @@ import lombok.*;
 
 
 @Data
-public class ProductDTO {
+public class ProductDto {
 
     @NotBlank
     private String productName;

@@ -3,7 +3,7 @@ package com.rikkachiu.ecommerce_api.security;
 import com.rikkachiu.ecommerce_api.constant.Role;
 import com.rikkachiu.ecommerce_api.dao.role.RoleDao;
 import com.rikkachiu.ecommerce_api.dao.user.UserDao;
-import com.rikkachiu.ecommerce_api.model.dto.UserDTO;
+import com.rikkachiu.ecommerce_api.model.dto.UserDto;
 import com.rikkachiu.ecommerce_api.model.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -50,7 +50,7 @@ public class OAuth2OidcService extends OidcUserService {
         // 如果尚未註冊，則建立資料
         if (user == null) {
             // 封裝 userDTO
-            UserDTO userDTO = new UserDTO();
+            UserDto userDTO = new UserDto();
             userDTO.setEmail(email);
             userDTO.setProviderUserId(providerUserId);
             userDTO.setProvider(provider);
@@ -75,7 +75,7 @@ public class OAuth2OidcService extends OidcUserService {
         // 合併不同 OAuth2.0 帳號
         if (user != null && !user.getProvider().equals(provider)) {
             // 封裝 userDTO
-            UserDTO userDTO = new UserDTO();
+            UserDto userDTO = new UserDto();
             userDTO.setEmail(email);
             userDTO.setProviderUserId(providerUserId);
             userDTO.setProvider(provider);

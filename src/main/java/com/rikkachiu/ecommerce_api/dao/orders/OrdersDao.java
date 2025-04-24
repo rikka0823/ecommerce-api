@@ -1,6 +1,6 @@
 package com.rikkachiu.ecommerce_api.dao.orders;
 
-import com.rikkachiu.ecommerce_api.model.dto.OrdersQueryParamsDTO;
+import com.rikkachiu.ecommerce_api.model.dto.OrdersQueryParamsDto;
 import com.rikkachiu.ecommerce_api.model.pojo.OrderItem;
 import com.rikkachiu.ecommerce_api.model.pojo.Orders;
 
@@ -24,7 +24,7 @@ public interface OrdersDao {
     Integer getOrdersCount(Integer userId);
 
     // 查詢所有訂單，依不同條件
-    List<Orders> getOrders(Integer userId, OrdersQueryParamsDTO ordersQueryParamsDTO);
+    List<Orders> getOrders(Integer userId, OrdersQueryParamsDto ordersQueryParamsDTO);
 
     // 取得所有訂單號碼
     List<Integer> getOrdersIds(Integer userId);

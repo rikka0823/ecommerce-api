@@ -1,7 +1,7 @@
 package com.rikkachiu.ecommerce_api.dao.user;
 
 import com.rikkachiu.ecommerce_api.mapper.UserRowMapper;
-import com.rikkachiu.ecommerce_api.model.dto.UserDTO;
+import com.rikkachiu.ecommerce_api.model.dto.UserDto;
 import com.rikkachiu.ecommerce_api.model.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -57,7 +57,7 @@ public class UserDaoImpl implements UserDao {
 
     // 建立帳號
     @Override
-    public Integer createUser(UserDTO userDTO) {
+    public Integer createUser(UserDto userDTO) {
         // sql 語法與欄位映射
         String sql = "INSERT INTO `user` (email, password, created_date, last_modified_date, provider_user_id, provider) " +
                 "VALUES (:email, :password, :createdDate, :lastModifiedDate, :providerUserId, :provider);";
