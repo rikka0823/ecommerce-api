@@ -78,10 +78,10 @@
   根據商品 ID 查詢商品詳細資訊。
 
 - `POST /products`
-  新增商品。請求體為 `ProductDTO`。
+  新增商品。請求體為 `ProductDtO`。
 
 - `PUT /products/{productId}`
-  更新指定 ID 的商品資訊。請求體為 `ProductDTO`。
+  更新指定 ID 的商品資訊。請求體為 `ProductDtO`。
 
 - `DELETE /products/{productId}`
   刪除指定 ID 的商品。
@@ -89,7 +89,7 @@
 ### 訂單管理 API
 
 - `POST /users/{userId}/orders`
-  為指定用戶 ID 創建訂單。請求體為 `OrdersDTO`。
+  為指定用戶 ID 創建訂單。請求體為 `OrdersDtO`。
 
 - `GET /users/{userId}/orders`
   查詢指定用戶 ID 的訂單列表，支援以下查詢參數：
@@ -104,7 +104,7 @@
 ### 會員管理 API
 
 - `POST /users/register`
-  註冊新用戶。請求體為 `UserDTO`。
+  註冊新用戶。請求體為 `UserDto`。
 
 - `POST /users/login`
   用戶登入。需要有效的 OAuth2.0 認證。
@@ -113,7 +113,7 @@
   根據 Email 查詢用戶資訊。
 
 - `PUT /users/update`
-  根據 Email 更新用戶角色。請求體為 `RoleDTO`。
+  根據 Email 更新用戶角色。請求體為 `RoleDtO`。
 
 - `DELETE /users/{userId}/delete`
   根據用戶 ID 刪除帳號。需要有效的 OAuth2.0 認證。
@@ -124,7 +124,7 @@
   生成 Keycloak 的授權網址。
 
 - `POST /keycloak/getToken`
-  使用授權碼 (code) 向 Keycloak 請求 Access Token 和 Refresh Token。請求體為 `CodeDTO`。
+  使用授權碼 (code) 向 Keycloak 請求 Access Token 和 Refresh Token。請求體為 `CodeDto`。
 
 - `POST /keycloak/exchangeAccessToken`
-  使用 Refresh Token 向 Keycloak 換取新的 Access Token。請求體為 `RefreshTokenDTO`。
+  使用 Refresh Token 向 Keycloak 換取新的 Access Token。請求體為 `RefreshTokenDto`。
