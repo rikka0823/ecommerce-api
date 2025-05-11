@@ -36,7 +36,7 @@ public class OrdersController {
     @PostMapping("/users/{userId}/orders")
     public ResponseEntity<Orders> createOrders(
             @PathVariable Integer userId,
-            @RequestBody @Valid OrdersDto ordersDTO,
+            @RequestBody @Valid OrdersDto ordersDto,
             Authentication authentication,
             @AuthenticationPrincipal Jwt jwt
     ) {
@@ -44,7 +44,7 @@ public class OrdersController {
         userService.checkUserIdByEmail(authentication, jwt, userId);
 
         // 取得 id 及對應物件
-        int orderId = ordersService.createOrders(userId, ordersDTO);
+        int orderId = ordersService.createOrders(userId, ordersDto);
         Orders orders = ordersService.getOrdersById(orderId);
 
         // 檢查是否為 null
