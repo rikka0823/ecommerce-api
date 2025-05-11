@@ -40,9 +40,9 @@ public class UserController {
 
     @Operation(summary = "建立帳號")
     @PostMapping("/users/register")
-    public ResponseEntity<User> register(@RequestBody @Valid UserDto userDTO) {
+    public ResponseEntity<User> register(@RequestBody @Valid UserDto userDto) {
         // 取得 id 及對應物件
-        int userId = userService.register(userDTO);
+        int userId = userService.register(userDto);
         User user = userService.getUserById(userId);
 
         // 檢查是否為 null
@@ -83,9 +83,9 @@ public class UserController {
 
     @Operation(summary = "更新", description = "依照 email 更新用戶角色")
     @PutMapping("/users/update")
-    public ResponseEntity<User> updateUserRolesByEmail(@RequestBody @Valid RoleDto roleDTO) {
+    public ResponseEntity<User> updateUserRolesByEmail(@RequestBody @Valid RoleDto roleDto) {
         // 更新 user，並檢查是否為 null
-        User user = userService.updateUserRolesByEmail(roleDTO);
+        User user = userService.updateUserRolesByEmail(roleDto);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -110,13 +110,13 @@ public class UserController {
 
     @Operation(summary = "獲取 access token 和 refresh token")
     @PostMapping("/keycloak/getToken")
-    public ResponseEntity<KeycloakToken> getToken(@RequestBody @Valid CodeDto codeDTO) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getToken(codeDTO));
+    public ResponseEntity<KeycloakToken> getToken(@RequestBody @Valid CodeDto codeDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getToken(codeDto));
     }
 
     @Operation(summary = "以 refresh_token 換取 access_token")
     @PostMapping("/keycloak/exchangeAccessToken")
-    public ResponseEntity<String> exchangeAccessToken(@RequestBody @Valid RefreshTokenDto refreshTokenDTO) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.exchangeAccessToken(refreshTokenDTO));
+    public ResponseEntity<String> exchangeAccessToken(@RequestBody @Valid RefreshTokenDto refreshTokenDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.exchangeAccessToken(refreshTokenDto));
     }
 }

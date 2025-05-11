@@ -54,7 +54,7 @@ public class ProductController {
         }
 
         // 將查詢參數封裝
-        ProductQueryParamsDto productQueryParamsDTO = ProductQueryParamsDto.builder()
+        ProductQueryParamsDto productQueryParamsDto = ProductQueryParamsDto.builder()
                 .category(category)
                 .search(search)
                 .orderBy(orderBy.name().toLowerCase())
@@ -63,16 +63,16 @@ public class ProductController {
                 .offset(offset)
                 .build();
 
-        // 將 返回資料封裝在 PageDTO<Product>
-        PageDto<Product> pageDTO =  new PageDto<>();
-        pageDTO.setLimit(limit);
-        pageDTO.setOffset(offset);
-        pageDTO.setTotal(productService.getProductCount(productQueryParamsDTO));
-        pageDTO.setResults(productService.getProducts(productQueryParamsDTO));
+        // 將 返回資料封裝在 PageDto<Product>
+        PageDto<Product> pageDto =  new PageDto<>();
+        pageDto.setLimit(limit);
+        pageDto.setOffset(offset);
+        pageDto.setTotal(productService.getProductCount(productQueryParamsDto));
+        pageDto.setResults(productService.getProducts(productQueryParamsDto));
 
         return ResponseEntity.status(HttpStatus.OK)
                 .cacheControl(CacheControl.maxAge(15, TimeUnit.MINUTES))
-                .body(pageDTO);
+                .body(pageDto);
     }
 
     @Operation(summary = "查詢", description = "依 productId 查詢商品")
@@ -93,9 +93,9 @@ public class ProductController {
 
     @Operation(summary = "新增商品")
     @PostMapping("/products")
-    public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductDto productDTO) {
+    public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductDto productDto) {
         // 取得 id 及對應物件
-        int id = productService.createProduct(productDTO);
+        int id = productService.createProduct(productDto);
         Product product = productService.getProductById(id);
 
         // 檢查是否為 null
@@ -109,14 +109,14 @@ public class ProductController {
     @Operation(summary = "更新", description = "依 productId 更新商品")
     @PutMapping("/products/{productId}")
     public ResponseEntity<Product> updateProduct(@PathVariable Integer productId,
-                                                 @RequestBody @Valid ProductDto productDTO) {
+                                                 @RequestBody @Valid ProductDto productDto) {
         // 檢查商品 id 是否存在
         if (productService.getProductById(productId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         // 更新商品
-        productService.updateProduct(productId, productDTO);
+        productService.updateProduct(productId, productDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(productService.getProductById(productId));
     }

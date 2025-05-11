@@ -68,21 +68,21 @@ public class OrdersController {
         userService.checkUserIdByEmail(authentication, jwt, userId);
 
         // 將查詢參數封裝
-        OrdersQueryParamsDto ordersQueryParamsDTO = OrdersQueryParamsDto.builder()
+        OrdersQueryParamsDto ordersQueryParamsDto = OrdersQueryParamsDto.builder()
                 .limit(limit)
                 .offset(offset)
                 .build();
 
-        // 將 返回資料封裝在 PageDTO<Orders>
-        PageDto<Orders> pageDTO = new PageDto<>();
-        pageDTO.setLimit(limit);
-        pageDTO.setOffset(offset);
-        pageDTO.setTotal(ordersService.getOrdersCount(userId));
-        pageDTO.setResults(ordersService.getOrders(userId, ordersQueryParamsDTO));
+        // 將 返回資料封裝在 PageDto<Orders>
+        PageDto<Orders> pageDto = new PageDto<>();
+        pageDto.setLimit(limit);
+        pageDto.setOffset(offset);
+        pageDto.setTotal(ordersService.getOrdersCount(userId));
+        pageDto.setResults(ordersService.getOrders(userId, ordersQueryParamsDto));
 
         return ResponseEntity.status(HttpStatus.OK)
                 .cacheControl(CacheControl.maxAge(15, TimeUnit.MINUTES))
-                .body(pageDTO);
+                .body(pageDto);
     }
 
     @Operation(summary = "刪除", description = "依 userId 及 orderId 刪除訂單")
