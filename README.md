@@ -28,8 +28,8 @@
 - **Redis**：作為非關聯式資料庫，採用 Cache Aside Pattern，儲存熱門查詢資訊，輔助 MySQL，減少資料庫讀取壓力。 
 - **H2 Database**：嵌入式資料庫，採 In-Memory 模式，結合單元測試，不持久化資料，建立乾淨測試環境。
 - **JUnit 5**：針對重要商業邏輯撰寫單元測試，如用戶註冊，訂單、列表查詢等，確保程式的穩定性與可靠性，程式碼覆蓋率（Code Coverage），約70%。
-- **SLF4J、Logback**：透過 SLF4J 撰寫登入行為紀錄，搭配 LoggerFactory 記錄 OAuth 2.0 與 JWT 登入方式，詳細記錄登入帳號、User-Agent 與時間等資訊，有助於使用者行為分析、問題排查與資安稽核。
-- **Springdoc OpenAPI**：用於生成 Swagger UI 文件，詳細描述 API 端點。
+- **SLF4J、Logback**：透過 SLF4J 作為日誌抽象層，搭配 Logback 作為實際的日誌實作，記錄 OAuth 2.0 與 JWT 的登入行為，包括登入帳號、User-Agent 與時間等資訊，有助於使用者行為分析、問題排查與資安稽核。
+- **SpringDoc OpenAPI**：用於生成 Swagger UI 文件，詳細描述 API 端點。
 - **Nginx**：靜態網頁資源的存放伺服器，模擬前端授權碼流程，作為 OAuth 2.0 流程中的重定向頁面（redirect URIs）。
 - **Docker**：編寫 Dockerfile 以建立前端跳轉頁面（web）、MySQL 資料庫的容器映像檔（image），並使用 Docker Compose 管理多容器架構，整合 Nginx、MySQL、Redis，建立開發一致環境。
 
