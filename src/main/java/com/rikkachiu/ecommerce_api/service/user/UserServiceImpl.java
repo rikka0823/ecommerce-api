@@ -132,21 +132,21 @@ public class UserServiceImpl implements UserService {
     @CacheEvict(cacheNames = "ecommerce_user", allEntries = true)
     @Transactional
     @Override
-    public Integer register(UserDto userDTO) {
+    public Integer register(UserDto userDto) {
         // 檢查 email 是否已存在
-        if (userDao.getUserByEmail(userDTO.getEmail()) != null) {
-            logger.warn("email: {} 已存在", userDTO.getEmail());
+        if (userDao.getUserByEmail(userDto.getEmail()) != null) {
+            logger.warn("email: {} 已存在", userDto.getEmail());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         // 密碼加密
-        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
         // 建立 user
-        int userId = userDao.createUser(userDTO);
+        int userId = userDao.createUser(userDto);
 
         // 建立 role
-        roleDao.createUserHasRole(userId, userDTO.getRoleSet());
+        roleDao.createUserHasRole(userId, userDto.getRoleSet());
 
         return userId;
     }
@@ -177,20 +177,20 @@ public class UserServiceImpl implements UserService {
     @CacheEvict(cacheNames = "ecommerce_user", allEntries = true)
     @Transactional
     @Override
-    public User updateUserRolesByEmail(RoleDto roleDTO) {
+    public User updateUserRolesByEmail(RoleDto roleDto) {
         // 依 email 查詢 user 是否存在
-        User user = userDao.getUserByEmail(roleDTO.getEmail());
+        User user = userDao.getUserByEmail(roleDto.getEmail());
         if (user == null) {
-            logger.warn("{}: 查無此 email", roleDTO.getEmail());
+            logger.warn("{}: 查無此 email", roleDto.getEmail());
             return null;
         }
 
         // 先刪除後更新
-        roleDao.deleteRolesById(roleDTO.getEmail());
-        roleDao.createUserHasRole(user.getUserId(), roleDTO.getRoleSet());
+        roleDao.deleteRolesById(roleDto.getEmail());
+        roleDao.createUserHasRole(user.getUserId(), roleDto.getRoleSet());
 
         // 封裝 roleSet
-        user.setRoleSet(roleDTO.getRoleSet());
+        user.setRoleSet(roleDto.getRoleSet());
 
         return user;
     }
@@ -246,7 +246,7 @@ public class UserServiceImpl implements UserService {
 
     // 獲取 access token 和 refresh token
     @Override
-    public KeycloakToken getToken(CodeDto codeDTO) {
+    public KeycloakToken getToken(CodeDto codeDto) {
         // 設定 headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -257,7 +257,7 @@ public class UserServiceImpl implements UserService {
         body.add("grant_type", GRANT_TYPE);
         body.add("client_id", KEYCLOAK_CLIENT_ID);
         body.add("client_secret", KEYCLOAK_CLIENT_SECRET);
-        body.add("code", codeDTO.getCode());
+        body.add("code", codeDto.getCode());
         body.add("redirect_uri", REDIRECT_URI);
 
         // 獲取、更新 token
@@ -271,7 +271,7 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
         if (keycloakToken != null && keycloakToken.getRefreshToken() != null) {
-            userDao.updateRefreshTokenByEmail(codeDTO.getEmail(), keycloakToken.getRefreshToken());
+            userDao.updateRefreshTokenByEmail(codeDto.getEmail(), keycloakToken.getRefreshToken());
         }
 
         return keycloakToken;
@@ -279,7 +279,7 @@ public class UserServiceImpl implements UserService {
 
     // 以 refresh_token 換取 access_token
     @Override
-    public String exchangeAccessToken(RefreshTokenDto refreshTokenDTO) {
+    public String exchangeAccessToken(RefreshTokenDto refreshTokenDto) {
         // 設定 headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -290,7 +290,7 @@ public class UserServiceImpl implements UserService {
         body.add("grant_type", "refresh_token");
         body.add("client_id", KEYCLOAK_CLIENT_ID);
         body.add("client_secret", KEYCLOAK_CLIENT_SECRET);
-        body.add("refresh_token", refreshTokenDTO.getRefreshToken());
+        body.add("refresh_token", refreshTokenDto.getRefreshToken());
 
         // 獲取、更新 token
         KeycloakToken keycloakToken;

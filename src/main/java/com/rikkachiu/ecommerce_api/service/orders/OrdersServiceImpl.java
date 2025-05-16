@@ -50,7 +50,7 @@ public class OrdersServiceImpl implements OrdersService {
     @CacheEvict(cacheNames = "ecommerce_orders", allEntries = true)
     @Transactional
     @Override
-    public Integer createOrders(Integer userId, OrdersDto ordersDTO) {
+    public Integer createOrders(Integer userId, OrdersDto ordersDto) {
         // 檢查 userId 是否存在
         existsById(userId);
 
@@ -60,7 +60,7 @@ public class OrdersServiceImpl implements OrdersService {
 
         // 計算金額、封裝 orderItemList、productList
         int totalAmount = 0;
-        for (BuyItemDto buyItemDTO : ordersDTO.getBuyItemDtoList()) {
+        for (BuyItemDto buyItemDTO : ordersDto.getBuyItemDtoList()) {
             // 檢查 productId是否存在、有足夠庫存
             Product product = productDao.getProductById(buyItemDTO.getProductId());
             if (product == null) {
@@ -135,12 +135,12 @@ public class OrdersServiceImpl implements OrdersService {
             key = "'userId-' + #p0 + '-' + #p1.limit + '-' + #p1.offset",
             unless = "#result == null")
     @Override
-    public List<Orders> getOrders(Integer userId, OrdersQueryParamsDto ordersQueryParamsDTO) {
+    public List<Orders> getOrders(Integer userId, OrdersQueryParamsDto ordersQueryParamsDto) {
         // 檢查 userId 是否存在
         existsById(userId);
 
         // 封裝 List<Orders>
-        List<Orders> ordersList = ordersDao.getOrders(userId, ordersQueryParamsDTO);
+        List<Orders> ordersList = ordersDao.getOrders(userId, ordersQueryParamsDto);
         for (Orders orders : ordersList) {
             orders.setOrderItemList(ordersDao.getOrderItemsById(userId));
         }

@@ -23,8 +23,8 @@ public class ProductServiceImpl implements ProductService {
                     "#p0.sort + '-' + " + "#p0.limit + '-' + #p0.offset",
             unless = "#result == null")
     @Override
-    public Integer getProductCount(ProductQueryParamsDto productQueryParamsDTO) {
-        return productDao.getProductCount(productQueryParamsDTO);
+    public Integer getProductCount(ProductQueryParamsDto productQueryParamsDto) {
+        return productDao.getProductCount(productQueryParamsDto);
     }
 
     // 查詢所有商品，依不同條件
@@ -33,8 +33,8 @@ public class ProductServiceImpl implements ProductService {
                     "#p0.sort + '-' + " + "#p0.limit + '-' + #p0.offset",
             unless = "#result == null")
     @Override
-    public List<Product> getProducts(ProductQueryParamsDto productQueryParamsDTO) {
-        return productDao.getProducts(productQueryParamsDTO);
+    public List<Product> getProducts(ProductQueryParamsDto productQueryParamsDto) {
+        return productDao.getProducts(productQueryParamsDto);
     }
 
     // 依 id 查詢商品
@@ -49,16 +49,16 @@ public class ProductServiceImpl implements ProductService {
     @CacheEvict(cacheNames = {"ecommerce_getProductCount", "ecommerce_product", "ecommerce_getProductById"},
             allEntries = true)
     @Override
-    public Integer createProduct(ProductDto productDTO) {
-        return productDao.createProduct(productDTO);
+    public Integer createProduct(ProductDto productDto) {
+        return productDao.createProduct(productDto);
     }
 
     // 依 id 更新商品
     @CacheEvict(cacheNames = {"ecommerce_getProductCount", "ecommerce_product", "ecommerce_getProductById"},
             allEntries = true)
     @Override
-    public void updateProduct(Integer id, ProductDto productDTO) {
-        productDao.updateProduct(id, productDTO);
+    public void updateProduct(Integer id, ProductDto productDto) {
+        productDao.updateProduct(id, productDto);
     }
 
     // 依 id 刪除商品

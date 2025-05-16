@@ -116,7 +116,7 @@ public class OrdersDaoImpl implements OrdersDao {
 
     // 查詢所有訂單，依不同條件
     @Override
-    public List<Orders> getOrders(Integer userId, OrdersQueryParamsDto ordersQueryParamsDTO) {
+    public List<Orders> getOrders(Integer userId, OrdersQueryParamsDto ordersQueryParamsDto) {
         // sql 語法與欄位映射
         StringBuilder sql = new StringBuilder("SELECT order_id, user_id, total_amount, created_date, last_modified_date " +
                 "FROM orders " +
@@ -132,8 +132,8 @@ public class OrdersDaoImpl implements OrdersDao {
                 .append(":limit")
                 .append(" OFFSET ")
                 .append(":offset");
-        params.addValue("limit",ordersQueryParamsDTO.getLimit())
-                .addValue("offset", ordersQueryParamsDTO.getOffset());
+        params.addValue("limit", ordersQueryParamsDto.getLimit())
+                .addValue("offset", ordersQueryParamsDto.getOffset());
 
         return namedParameterJdbcTemplate.query(sql.toString(), params, new OrdersRowMapper());
     }

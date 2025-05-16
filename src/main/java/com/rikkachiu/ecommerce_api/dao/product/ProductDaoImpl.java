@@ -22,13 +22,13 @@ public class ProductDaoImpl implements ProductDao {
 
     // 查詢商品總數
     @Override
-    public Integer getProductCount(ProductQueryParamsDto productQueryParamsDTO) {
+    public Integer getProductCount(ProductQueryParamsDto productQueryParamsDto) {
         // sql 語法與欄位映射
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM product WHERE 1=1");
         MapSqlParameterSource params = new MapSqlParameterSource();
 
         //新增篩選條件 sql
-        addFilteringSql(productQueryParamsDTO, sql, params);
+        addFilteringSql(productQueryParamsDto, sql, params);
 
         // 取得商品總數
         Integer count = namedParameterJdbcTemplate.queryForObject(sql.toString(), params, Integer.class);
@@ -41,7 +41,7 @@ public class ProductDaoImpl implements ProductDao {
 
     // 查詢所有商品，依不同條件
     @Override
-    public List<Product> getProducts(ProductQueryParamsDto productQueryParamsDTO) {
+    public List<Product> getProducts(ProductQueryParamsDto productQueryParamsDto) {
         // sql 語法與欄位映射
         StringBuilder sql = new StringBuilder("SELECT product_id, product_name, category, image_url, " +
                 "price, stock, description, created_date, last_modified_date " +
@@ -50,18 +50,18 @@ public class ProductDaoImpl implements ProductDao {
         MapSqlParameterSource params = new MapSqlParameterSource();
 
         //新增篩選條件 sql
-        addFilteringSql(productQueryParamsDTO, sql, params);
+        addFilteringSql(productQueryParamsDto, sql, params);
 
         // 依據 orderBy, sort 排序
         sql.append(" ORDER BY ")
-                .append(productQueryParamsDTO.getOrderBy())
+                .append(productQueryParamsDto.getOrderBy())
                 .append(" ")
-                .append(productQueryParamsDTO.getSort());
+                .append(productQueryParamsDto.getSort());
 
         // 依據 limit, offset 分頁
         sql.append(" LIMIT :limit OFFSET :offset");
-        params.addValue("limit", productQueryParamsDTO.getLimit())
-                .addValue("offset", productQueryParamsDTO.getOffset());
+        params.addValue("limit", productQueryParamsDto.getLimit())
+                .addValue("offset", productQueryParamsDto.getOffset());
 
         return namedParameterJdbcTemplate.query(sql.toString(), params, new ProductRowMapper());
     }
@@ -89,19 +89,19 @@ public class ProductDaoImpl implements ProductDao {
 
     // 新增商品
     @Override
-    public Integer createProduct(ProductDto productDTO) {
+    public Integer createProduct(ProductDto productDto) {
         // sql 語法與欄位映射
         String sql = "INSERT INTO product (product_name, category, image_url, price, stock, " +
                 "description, created_date, last_modified_date) " +
                 "VALUES (:productName, :category, :imageUrl, :price, :stock, " +
                 ":description, :createdDate, :lastModifiedDate)";
         MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("productName", productDTO.getProductName())
-                .addValue("category", productDTO.getCategory().name())
-                .addValue("imageUrl", productDTO.getImageUrl())
-                .addValue("price", productDTO.getPrice())
-                .addValue("stock", productDTO.getStock())
-                .addValue("description", productDTO.getDescription())
+                .addValue("productName", productDto.getProductName())
+                .addValue("category", productDto.getCategory().name())
+                .addValue("imageUrl", productDto.getImageUrl())
+                .addValue("price", productDto.getPrice())
+                .addValue("stock", productDto.getStock())
+                .addValue("description", productDto.getDescription())
                 .addValue("createdDate", new Date())
                 .addValue("lastModifiedDate", new Date());
 
@@ -115,19 +115,19 @@ public class ProductDaoImpl implements ProductDao {
 
     // 依 id 更新商品
     @Override
-    public void updateProduct(Integer productId, ProductDto productDTO) {
+    public void updateProduct(Integer productId, ProductDto productDto) {
         // sql 語法與欄位映射
         String sql = "UPDATE product " +
                 "SET product_name = :productName, category = :category, image_url = :imageUrl, price = :price, " +
                 "stock = :stock, description = :description, last_modified_date = :lastModifiedDate " +
                 "WHERE product_id = :productId";
         MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("productName", productDTO.getProductName())
-                .addValue("category", productDTO.getCategory().name())
-                .addValue("imageUrl", productDTO.getImageUrl())
-                .addValue("price", productDTO.getPrice())
-                .addValue("stock", productDTO.getStock())
-                .addValue("description", productDTO.getDescription())
+                .addValue("productName", productDto.getProductName())
+                .addValue("category", productDto.getCategory().name())
+                .addValue("imageUrl", productDto.getImageUrl())
+                .addValue("price", productDto.getPrice())
+                .addValue("stock", productDto.getStock())
+                .addValue("description", productDto.getDescription())
                 .addValue("lastModifiedDate", new Date())
                 .addValue("productId", productId);
 

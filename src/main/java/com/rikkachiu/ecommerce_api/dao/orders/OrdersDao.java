@@ -24,7 +24,7 @@ public interface OrdersDao {
     Integer getOrdersCount(Integer userId);
 
     // 查詢所有訂單，依不同條件
-    List<Orders> getOrders(Integer userId, OrdersQueryParamsDto ordersQueryParamsDTO);
+    List<Orders> getOrders(Integer userId, OrdersQueryParamsDto ordersQueryParamsDto);
 
     // 取得所有訂單號碼
     List<Integer> getOrdersIds(Integer userId);

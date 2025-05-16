@@ -11,7 +11,7 @@ import java.util.List;
 public interface OrdersService {
 
     // 創建訂單
-    Integer createOrders(Integer userId, OrdersDto ordersDTO);
+    Integer createOrders(Integer userId, OrdersDto ordersDto);
 
     //取得訂單
     Orders getOrdersById(Integer orderId);
@@ -20,7 +20,7 @@ public interface OrdersService {
     Integer getOrdersCount(Integer userId);
 
     // 查詢所有訂單，依不同條件
-    List<Orders> getOrders(Integer userId, OrdersQueryParamsDto ordersQueryParamsDTO);
+    List<Orders> getOrders(Integer userId, OrdersQueryParamsDto ordersQueryParamsDto);
 
     // 刪除訂單
     void deleteOrders(Integer userId, Integer orderId, Authentication authentication, Jwt jwt);

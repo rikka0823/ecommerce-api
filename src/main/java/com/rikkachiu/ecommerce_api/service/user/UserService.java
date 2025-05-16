@@ -21,13 +21,13 @@ public interface UserService {
     User getUserById(Integer userId);
 
     // 建立帳號
-    Integer register(UserDto userDTO);
+    Integer register(UserDto userDto);
 
     // 登入
     User userLogin(Authentication authentication, Jwt jwt);
 
     // 依照 email 更新用戶角色
-    User updateUserRolesByEmail(RoleDto roleDTO);
+    User updateUserRolesByEmail(RoleDto roleDto);
 
     // 刪除帳號
     void deleteUser(Authentication authentication, Jwt jwt, Integer userId);
@@ -36,8 +36,8 @@ public interface UserService {
     String buildAuthUrl();
 
     // 獲取 access token 和 refresh token
-    KeycloakToken getToken(CodeDto codeDTO);
+    KeycloakToken getToken(CodeDto codeDto);
 
     // 以 refresh_token 換取 access_token
-    String exchangeAccessToken(RefreshTokenDto refreshTokenDTO);
+    String exchangeAccessToken(RefreshTokenDto refreshTokenDto);
 }
