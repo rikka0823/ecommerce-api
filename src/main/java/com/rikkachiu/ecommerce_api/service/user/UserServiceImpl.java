@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
 
         // 限制 ROLE_CUSTOMER 權限
         if (roleSet.size() == 1 && roleSet.contains(Role.ROLE_CUSTOMER)) {
-            if (user.getUserId() != userId) {
+            if (!user.getUserId().equals(userId)) {
                 logger.warn("id: {} 未被授權獲取該資源", user.getUserId());
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
@@ -210,7 +210,7 @@ public class UserServiceImpl implements UserService {
 
             // 禁止非 admin 刪除其他人帳號
             if (!user.getRoleSet().contains(Role.ROLE_ADMIN)) {
-                if (user.getUserId() != userId) {
+                if (!user.getUserId().equals(userId)) {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
                 }
             }
@@ -223,7 +223,7 @@ public class UserServiceImpl implements UserService {
 
             // 禁止非 admin 刪除其他人帳號
             if (!user.getRoleSet().contains(Role.ROLE_ADMIN)) {
-                if (user.getUserId() != userId) {
+                if (!user.getUserId().equals(userId)) {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
                 }
             }
@@ -303,6 +303,10 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
 
-        return keycloakToken.getAccessToken();
+        if (keycloakToken != null) {
+            return keycloakToken.getAccessToken();
+        }
+
+        return null;
     }
 }

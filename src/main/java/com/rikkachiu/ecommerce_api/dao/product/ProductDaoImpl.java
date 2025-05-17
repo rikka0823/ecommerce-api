@@ -167,19 +167,19 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     // 新增篩選條件 sql
-    private void addFilteringSql(ProductQueryParamsDto productQueryParamsDTO, StringBuilder sql,
+    private void addFilteringSql(ProductQueryParamsDto productQueryParamsDto, StringBuilder sql,
                                  MapSqlParameterSource params) {
         // 依據 category 添加篩選條件
-        if (productQueryParamsDTO.getCategory() != null) {
+        if (productQueryParamsDto.getCategory() != null) {
             sql.append(" AND category = :category");
-            params.addValue("category", productQueryParamsDTO.getCategory().name());
+            params.addValue("category", productQueryParamsDto.getCategory().name());
         }
 
         // 依據 search 添加篩選條件
-        if (productQueryParamsDTO.getSearch() != null &&
-                !productQueryParamsDTO.getSearch().trim().isEmpty()) {
+        if (productQueryParamsDto.getSearch() != null &&
+                !productQueryParamsDto.getSearch().trim().isEmpty()) {
             sql.append(" AND product_name LIKE :search");
-            params.addValue("search", "%" + productQueryParamsDTO.getSearch().trim() + "%");
+            params.addValue("search", "%" + productQueryParamsDto.getSearch().trim() + "%");
         }
     }
 }

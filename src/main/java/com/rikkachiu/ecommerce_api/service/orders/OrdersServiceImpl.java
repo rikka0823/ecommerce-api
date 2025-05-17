@@ -60,36 +60,36 @@ public class OrdersServiceImpl implements OrdersService {
 
         // 計算金額、封裝 orderItemList、productList
         int totalAmount = 0;
-        for (BuyItemDto buyItemDTO : ordersDto.getBuyItemDtoList()) {
+        for (BuyItemDto buyItemDto : ordersDto.getBuyItemDtoList()) {
             // 檢查 productId是否存在、有足夠庫存
-            Product product = productDao.getProductById(buyItemDTO.getProductId());
+            Product product = productDao.getProductById(buyItemDto.getProductId());
             if (product == null) {
-                logger.warn("productId: {} 不存在", buyItemDTO.getProductId());
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "此 productId 不存在: " + buyItemDTO.getProductId());
+                logger.warn("productId: {} 不存在", buyItemDto.getProductId());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "此 productId 不存在: " + buyItemDto.getProductId());
             }
-            if (product.getStock() < buyItemDTO.getQuantity()) {
+            if (product.getStock() < buyItemDto.getQuantity()) {
                 logger.warn("productId: {} 庫存量不足、庫存量: {}、購買量: {}",
-                        buyItemDTO.getProductId(), product.getStock(), buyItemDTO.getQuantity());
+                        buyItemDto.getProductId(), product.getStock(), buyItemDto.getQuantity());
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        "\n此 productId 庫存量不足: " + buyItemDTO.getProductId() +
+                        "\n此 productId 庫存量不足: " + buyItemDto.getProductId() +
                                 "\n庫存量: " + product.getStock() +
-                                "\n購買量: " + buyItemDTO.getQuantity());
+                                "\n購買量: " + buyItemDto.getQuantity());
             }
 
             // 計算 order_item 的 amount、訂單總金額
-            int amount = buyItemDTO.getQuantity() * product.getPrice();
+            int amount = buyItemDto.getQuantity() * product.getPrice();
             totalAmount += amount;
 
             // 儲存至 orderItemList
             OrderItem orderItem = OrderItem.builder()
-                    .productId(buyItemDTO.getProductId())
-                    .quantity(buyItemDTO.getQuantity())
+                    .productId(buyItemDto.getProductId())
+                    .quantity(buyItemDto.getQuantity())
                     .amount(amount)
                     .build();
             orderItemList.add(orderItem);
 
             // 更新庫存，儲存至 productList
-            product.setStock(product.getStock() - buyItemDTO.getQuantity());
+            product.setStock(product.getStock() - buyItemDto.getQuantity());
             productList.add(product);
         }
 
@@ -165,7 +165,7 @@ public class OrdersServiceImpl implements OrdersService {
 
         // 限制 ROLE_CUSTOMER 權限
         if (roleSet.size() == 1 && roleSet.contains(Role.ROLE_CUSTOMER)) {
-            if (user.getUserId() != userId) {
+            if (!user.getUserId().equals(userId)) {
                 logger.warn("id: {} 未被授權刪除該訂單", user.getUserId());
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
